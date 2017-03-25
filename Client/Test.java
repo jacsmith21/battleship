@@ -11,6 +11,8 @@ public class Test extends JFrame implements MouseListener, MouseMotionListener, 
 	final int MAX_ROW = 10;
 	final int MAX_COL = 10;
 	final boolean DEBUG = true;
+	final int LENGTH = 4;
+	final int BORDER = 2;
 
 	
 	private JPanel panel;
@@ -25,9 +27,9 @@ public class Test extends JFrame implements MouseListener, MouseMotionListener, 
 	public Test(){
 		setSize(WIDTH,HEIGHT);
 		
-		JPanel panel = new JPanel(new GridBagLayout());
-		mouseX = 200;
-		mouseY = 100;
+		panel = new JPanel(new GridBagLayout());
+		mouseX = 1;
+		mouseY = 1;
 		drag = false;
 		
 		panel.setBackground(Color.WHITE);
@@ -36,15 +38,14 @@ public class Test extends JFrame implements MouseListener, MouseMotionListener, 
 		GridBagConstraints c;
 		
 		//Adding ship first
-		int n = 4; //length of ships
 		c = new GridBagConstraints();
 		label1 = new JLabel();
 		label1.setOpaque(true);
-        label1.setPreferredSize(new Dimension(SIDE, n*SIDE+2*(n-1))); //Setting size to 1 grid by 4 grids
+        label1.setPreferredSize(new Dimension(SIDE, LENGTH*SIDE+2*(LENGTH-1))); //Setting size to 1 grid by 4 grids
 		label1.addMouseMotionListener(this);
         label1.addMouseListener(this);
-		c.gridheight = n; //Settings span to length
-		label1.setBounds(mouseX, mouseY, SIDE, SIDE*4); //No clue
+		c.gridheight = LENGTH; //Settings span to length
+		label1.setBounds(mouseX, mouseY, SIDE, SIDE*LENGTH); //No clue
         label1.setBackground(Color.BLACK);
         c.gridx = 0; //Initial location
         c.gridy = 0;
@@ -62,6 +63,7 @@ public class Test extends JFrame implements MouseListener, MouseMotionListener, 
 		c.weightx = 1; //To avoid clumping
 		c.weighty  = 1; //To avoid clumping
         panel.add(rotate, c);
+		System.out.println(panel.getX());
 		
 		
 		//Adding water labels underneath
@@ -82,6 +84,7 @@ public class Test extends JFrame implements MouseListener, MouseMotionListener, 
 		}
 		
 		this.add(panel);
+		System.out.println(panel.getSize());
 		
 	}
 	
@@ -94,32 +97,47 @@ public class Test extends JFrame implements MouseListener, MouseMotionListener, 
 
     public void mouseReleased(MouseEvent e) {
         drag = false;
+		
         int curPosX = label1.getX();
         int curPosY = label1.getY();
-
+		
         int cellX = curPosX / SIDE;
         int cellY = curPosY / SIDE;
 
-        cellX = cellX * SIDE;
-        cellY = cellY * SIDE;
-
-        if(label1.getWidth() > SIDE*2){ //If Horizontal
-            if(cellX + 250 > WIDTH){
-                cellX = 250;
-            } if(cellY + 50 > WIDTH){
-                cellY = 450;
+        int newX = getPosition(cellX); 
+        int newY = getPosition(cellY);
+		
+		if(DEBUG) System.out.println("x: " + curPosX + ", cell: " + cellX + ", new x: " + newX);
+		if(DEBUG) System.out.println("y: " + curPosY + ", cell: " + cellY + ", new y: " + newY);
+		
+        if(label1.getWidth() > SIDE+1){ //If HORIZONTAL
+            if(newX + LENGTH*SIDE > WIDTH){
+				cellX = MAX_COL-LENGTH; //new x cell
+                newX = getPosition(cellX);
+				if(DEBUG) System.out.println("Error new x cell: " + cellX);
+            } if(newY + SIDE > WIDTH){
+				cellY = MAX_ROW-1; //new y cell
+                newY = getPosition(cellY);
+				if(DEBUG) System.out.println("Error new y cell: " + cellY);
             }
-        } else{ //If Verticle
-            if(cellY + 250 > WIDTH){
-                cellY = 250;
-            } if(cellX + 50 > WIDTH){
-                cellX = 450;
+        } else{ //If VERTICLE
+            if(newY + LENGTH*SIDE > WIDTH){
+				cellY = MAX_ROW-LENGTH;
+                newY = getPosition(cellY); //new y cell
+				if(DEBUG) System.out.println("Error new y cell: " + cellY);
+            } if(newX + SIDE > WIDTH){
+				cellX = MAX_COL-1; //new y cell
+                newX = getPosition(cellX);
+				if(DEBUG) System.out.println("Error new x cell: " + cellX);
             }        
 		}
 
-        label1.setBounds(cellX, cellY , label1.getWidth(), label1.getHeight());
-
+        label1.setBounds(newX, newY , label1.getWidth(), label1.getHeight());
     }
+	
+	public int getPosition(int loc){ // where 0 <= loc < col/row
+		return loc*SIDE + loc*BORDER + BORDER/2; //SIDES + INNER BORDERS + OUTER BORDER
+	}
 
     public void mouseDragged(MouseEvent e) {
         if (drag) {
@@ -139,17 +157,18 @@ public class Test extends JFrame implements MouseListener, MouseMotionListener, 
     public void mouseClicked(MouseEvent e) {}
 
     public void actionPerformed(ActionEvent e) {
-        if(label1.getWidth() < SIDE*2){ //If verticle
-            if(label1.getX() + 250 > WIDTH){
-                label1.setBounds(250, label1.getY(), 250, 50);
+		int length = LENGTH*SIDE + (LENGTH-1)*BORDER + 1;
+        if(label1.getWidth() < SIDE+1){ //If VERTICLE, switch HORIZONTAL
+            if(label1.getX() + length > WIDTH){ //if rotating puts it outside the right side, move left
+                label1.setBounds(getPosition(MAX_COL-LENGTH), label1.getY(), length, SIDE);
             } else{
-                label1.setBounds(label1.getX(), label1.getY(), 250, 50);
+                label1.setBounds(label1.getX(), label1.getY(), length, SIDE);
             }
-        } else{
-            if(label1.getY() + 250 > WIDTH){
-                label1.setBounds(label1.getX(), 250, 50, 250);
+        } else{ //If HORIZONTAL, switch VERTICLE
+            if(label1.getY() + SIDE*LENGTH > WIDTH){ //if rotating puts it outside the bottom, move up
+                label1.setBounds(label1.getX(), getPosition(MAX_ROW-LENGTH), SIDE, length);
             } else{
-                label1.setBounds(label1.getX(), label1.getY(), 50, 250);
+                label1.setBounds(label1.getX(), label1.getY(), SIDE, length);
             }
         }
     }
