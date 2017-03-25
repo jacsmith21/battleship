@@ -13,10 +13,9 @@ import java.util.ArrayList;
 	6. Add theme music (LAST)
 	7. Add hit / miss sounds (LAST)
 	9. Make images come from direct folder in NETBEANS
-	
 */
 
-public class Game extends javax.swing.JFrame implements ActionListener{
+public class Game extends JPanel implements ActionListener{
 	private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
@@ -109,6 +108,8 @@ public class Game extends javax.swing.JFrame implements ActionListener{
 		commander = jLabel4;
 		submitButton = jButton4;
 		rotateButton = jButton6;
+		
+		this.add(gamePanel);
 		
 		//Setting initial game states
 		settingShips = true;
@@ -376,8 +377,6 @@ public class Game extends javax.swing.JFrame implements ActionListener{
         jLabel15 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Battleship");
         setBackground(new java.awt.Color(254, 254, 254));
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setFont(new java.awt.Font("Cursor", 0, 12)); // NOI18N
@@ -605,7 +604,10 @@ public class Game extends javax.swing.JFrame implements ActionListener{
                     .addComponent(jButton4)
                     .addComponent(jButton6)))
         );
-
+		
+		
+		//Remving as this class now extends a jPanel
+		/*
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -618,9 +620,6 @@ public class Game extends javax.swing.JFrame implements ActionListener{
         );
 
         pack();
+		*/
     }
-
-    public static void main(String args[]) {
-		new Game().setVisible(true);
-    }   
 }
