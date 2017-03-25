@@ -2,27 +2,38 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class Client extends JFrame{
-	private Container cp;
-	private JPanel game;
-	
-	private int HEIGHT = 600;
-	private int WIDTH = 1000;
-	
-	public Client(){
-		super("Battleship");
-		setSize(WIDTH,HEIGHT);
-		
-		cp = this.getContentPane(); //Getting content pane
-		game = new Game(); //Game panel
-		setContentPane(game); //Setting panel to content pane
-		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		pack();
-	}
-	
-	
+public class Client{
 	public static void main(String[] args){
-		new Client() .setVisible(true);
+		final int HEIGHT = 600;
+		final int WIDTH = 1000;
+		final boolean DEBUG = true;
+		
+		JFrame frame = new JFrame("Battleship");
+		frame.setSize(WIDTH,HEIGHT);
+		
+		Container cp = frame.getContentPane(); //Getting content pane
+		
+		Game game = new Game(); //Game panel
+		frame.setContentPane(game); //Setting panel to content pane
+		
+		
+		Thread t = new Thread(new Runnable(){
+        	public void run() {
+					while(!game.isFinished()){
+						try{
+							Thread.sleep(1000);
+						}catch(InterruptedException e){
+							System.out.println(e.getMessage());
+						}
+					}
+					if(DEBUG) System.out.println("Game Ended");
+		    	}
+			});
+		t.start();
+		
+		
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.pack();
+		frame.setVisible(true);
 	}
 }
