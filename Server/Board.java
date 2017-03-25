@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class Board {
 
     private Ship[] ships;
-
+	
     public Board(ArrayList<String[]> locations){
 
         ships = new Ship[locations.size()];
@@ -33,7 +33,6 @@ public class Board {
                 break;
             }
         }
-
         return result;
 
     }
@@ -52,5 +51,11 @@ public class Board {
         return result;
 
     }
+	
+	public String toString(){
+		String string = "";
+		for(Ship ship : ships) string += ship.toString() + " ";
+		return string;
+	}
 
 }

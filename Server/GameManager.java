@@ -4,6 +4,8 @@ import java.util.ArrayList;
  * Created by Tristen Tulkens and Jacob Smith on 2017-02-10.
  */
 public class GameManager {
+	
+	private final DEBUG = true;
 
     private Board player1Board;
     private Board player2Board;
@@ -57,7 +59,7 @@ public class GameManager {
         boolean p1Turn = true;
         boolean p2Turn = false;
         while(!gameOver){
-            while(p1Turn) {
+            while(p1Turn && !gameOver) {
                 player1Message = player1.recieve();
                 if (!Data.isValidCoordinate(player1Message)) {
                     player1.send("err");
@@ -67,7 +69,6 @@ public class GameManager {
                     if(result.contains("win")){
                         player2.send(player1Message+","+result.replace("win", "loss"));
 						gameOver = true;
-                        break;
                     } else {
                         player2.send(player1Message + "," + result);
                     }
@@ -75,7 +76,7 @@ public class GameManager {
                     p2Turn = true;
                 }
             }
-            while(p2Turn) {
+            while(p2Turn && !gameOver) {
                 player2Message = player2.recieve();
                 if (!Data.isValidCoordinate(player2Message)) {
                     player2.send("err");
@@ -85,7 +86,6 @@ public class GameManager {
                     if(result.contains("win")){
                         player1.send(player2Message+","+result.replace("win", "loss"));
 						gameOver = true;
-                        break;
                     } else {
                         player1.send(player2Message + "," + result);   
                     }
