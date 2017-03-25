@@ -15,7 +15,7 @@ import java.util.ArrayList;
 	9. Make images come from direct folder in NETBEANS
 */
 
-public class Game extends JPanel implements ActionListener{
+public class Game extends JFrame implements ActionListener{
 	private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
@@ -108,8 +108,6 @@ public class Game extends JPanel implements ActionListener{
 		commander = jLabel4;
 		submitButton = jButton4;
 		rotateButton = jButton6;
-		
-		this.add(gamePanel);
 		
 		//Setting initial game states
 		settingShips = true;
@@ -606,8 +604,6 @@ public class Game extends JPanel implements ActionListener{
         );
 		
 		
-		//Remving as this class now extends a jPanel
-		/*
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -620,6 +616,10 @@ public class Game extends JPanel implements ActionListener{
         );
 
         pack();
-		*/
+		
     }
+	
+	public static void main(String[] args){
+		new Game() .setVisible(true);
+	}
 }

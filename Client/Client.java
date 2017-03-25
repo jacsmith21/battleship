@@ -15,10 +15,7 @@ public class Client extends JFrame{
 		
 		cp = this.getContentPane(); //Getting content pane
 		game = new Game(); //Game panel
-		cp.add(game);
-		//cp.remove(game); //Removing game panel
-		
-		//setContentPane(introductory); //Setting panel to content pane
+		setContentPane(game); //Setting panel to content pane
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		pack();
