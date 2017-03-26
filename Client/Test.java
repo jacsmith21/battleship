@@ -4,16 +4,24 @@ import java.awt.event.*;
 
 
 public class Test extends JFrame implements MouseListener, MouseMotionListener, ActionListener{
-	private int WIDTH = 436; //FIX this
-	private int HEIGHT = 459; //FIX this, should be the same
+	private int WIDTH = 436-20; //FIX this
+	private int HEIGHT = 459-20; //FIX this, should be the same
 	private int SIDE = 40;
 	private Color WATER = new Color(64,164,223);
 	final int MAX_ROW = 10;
 	final int MAX_COL = 10;
 	final boolean DEBUG = true;
 	final int LENGTH = 4;
-	final int BORDER = 2;
+	final int BORDER = 0;
+	final Color WATER_BORDER = new Color(82,187,245);
+	final Color SHIP = new Color(100,100,100);
 
+	
+	final int[] X_POSITIONS = {0, 1, 2, 3};
+	final int[] Y_POSITIONS = {0, 0, 0, 0};
+	final int[] LENGTHS = {5,4,3,2};
+	final char[] ORIENTATIONS = {'v','v','v','v'}; //v = VERTICLE, h = HORIZONTAL
+	final String[] NAMES = {"AC","CR","SB","FR"};
 	
 	private JPanel panel;
     private JLabel label1;
@@ -22,6 +30,8 @@ public class Test extends JFrame implements MouseListener, MouseMotionListener, 
     private int mouseX;
     private int mouseY;
     private boolean drag;
+	
+	private JLabel ship;
 	
 	
 	public Test(){
@@ -32,26 +42,35 @@ public class Test extends JFrame implements MouseListener, MouseMotionListener, 
 		mouseY = 1;
 		drag = false;
 		
-		panel.setBackground(Color.WHITE);
+		panel.setBackground(WATER_BORDER);
 		panel.setPreferredSize(new Dimension(400,400));
 		setDefaultCloseOperation(this.EXIT_ON_CLOSE);
 		GridBagConstraints c;
+		
+		ships = new ShipLabel[X_POSITIONS.length];
+		for(int i = 0; i < X_POSITIONS.length; i++){
+			ships[i] = createShip(X_POSITIONS[i], Y_POSITIONS[i]);
+			if(DEBUG) System.out.println("Created ship at (" + ships[i].getX() + "," + ships[i].getY() + ")");
+		}
+		
+		
 		
 		//Adding ship first
 		c = new GridBagConstraints();
 		label1 = new JLabel();
 		label1.setOpaque(true);
-        label1.setPreferredSize(new Dimension(SIDE, LENGTH*SIDE+2*(LENGTH-1))); //Setting size to 1 grid by 4 grids
+        label1.setPreferredSize(new Dimension(SIDE, LENGTH*SIDE+BORDER*(LENGTH-1))); //Setting size to 1 grid by 4 grids
 		label1.addMouseMotionListener(this);
         label1.addMouseListener(this);
 		c.gridheight = LENGTH; //Settings span to length
-		label1.setBounds(mouseX, mouseY, SIDE, SIDE*LENGTH); //No clue
+		//label1.setBounds(mouseX, mouseY, SIDE, SIDE*LENGTH); 
         label1.setBackground(Color.BLACK);
-        c.gridx = 0; //Initial location
-        c.gridy = 0;
+        c.gridx = 6; //Initial location
+        c.gridy = 1;
 		c.weightx = 1; //To avoid clumping
 		c.weighty  = 1; //To avoid clumping
         panel.add(label1, c);
+		
 		
 		//Button in bottom right cell
 		c = new GridBagConstraints();
@@ -66,6 +85,7 @@ public class Test extends JFrame implements MouseListener, MouseMotionListener, 
 		System.out.println(panel.getX());
 		
 		
+		
 		//Adding water labels underneath
 		for(int i = 0; i < 10; i++){
 			for(int j = 0; j < 10; j++){
@@ -74,19 +94,59 @@ public class Test extends JFrame implements MouseListener, MouseMotionListener, 
 				c.gridy = j;
 				c.weightx = 1; //To avoid clumping
 				c.weighty  = 1; //To avoid clumping
-				c.insets = new Insets(1,1,1,1); //Settign border in between components
-				JLabel label = new JLabel();
-				label.setOpaque(true);
-				label.setPreferredSize(new Dimension(SIDE,SIDE));
-				label.setBackground(WATER);
-				panel.add(label, c);
+				//c.insets = new Insets(1,1,1,1); //Settign border in between components
+				JButton button = new JButton();
+				button.setBorderPainted(true);
+				button.setBackground(WATER);
+				button.setBorder(BorderFactory.createLineBorder(WATER_BORDER));
+				button.setPreferredSize(new Dimension(SIDE,SIDE));
+				panel.add(button, c);
 			}
 		}
 		
 		this.add(panel);
 		System.out.println(panel.getSize());
-		
 	}
+	
+	private ShipLabel createShip(int x, int y){
+		c = new GridBagConstraints();
+		ShipLabel ship = new ShipLabel(0,0,0,"hy",'v');
+		ship.setOpaque(true);
+        ship.setPreferredSize(new Dimension(SIDE, LENGTH*SIDE+BORDER*(LENGTH-1))); //Setting size to 1 grid by 4 grids
+		ship.addMouseMotionListener(this);
+        ship.addMouseListener(this);
+		c.gridheight = LENGTH; //Settings span to length
+		//label1.setBounds(mouseX, mouseY, SIDE, SIDE*LENGTH); 
+        ship.setBackground(Color.BLACK);
+        c.gridx = x; //Initial location
+        c.gridy = y;
+		c.weightx = 1; //To avoid clumping
+		c.weighty  = 1; //To avoid clumping
+        panel.add(ship, c);
+		return ship;
+	}
+	
+	/*
+	private ShipLabel createShip(int x, int y, int length, String name, char orientation){
+		if(DEBUG) System.out.println("Setting ship at x: " + y + ", y: " + x + ", Dememsion: " + SIDE + ", " + SIDE*length);
+		ShipLabel ship = new ShipLabel(x, y, length, name, orientation);
+		c = new GridBagConstraints();
+		c.gridheight = length; //So that it is able to span multiple grid cells
+		ship.setOpaque(true);
+		if(orientation == 'h') ship.setPreferredSize( new Dimension(length*SIDE,SIDE) ); 
+        else ship.setPreferredSize( new Dimension(SIDE, length*SIDE) );
+		ship.addMouseMotionListener(this);
+        ship.addMouseListener(this);
+		c.gridheight = length; //Settings span to length
+        ship.setBackground(SHIP);
+        c.gridx = y;
+        c.gridy = x;
+		c.weightx = 1; //To avoid clumping
+		c.weighty = 1; //To avoid clumping
+		panel.add(ship, c);
+		return ship;
+	}
+	*/
 	
     public void mousePressed(MouseEvent e) {
         if (e.getSource() == label1) {
@@ -148,6 +208,9 @@ public class Test extends JFrame implements MouseListener, MouseMotionListener, 
             mouseX = e.getX();
             mouseY = e.getY();
             label1.setBounds(newX + mouseX + x, newY + mouseY + y, label1.getWidth(), label1.getHeight());
+			if(DEBUG) System.out.println("panel: " + newX + "," + newY);
+			if(DEBUG) System.out.println("x: " + x + ",y: " + y);
+			if(DEBUG) System.out.println("mousex: " + mouseX + ",mousey: " + mouseY  + "\n");
         }
     }
 
