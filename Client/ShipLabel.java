@@ -10,7 +10,6 @@ public class ShipLabel extends JLabel{
 	private boolean selected;
 	
 	public ShipLabel(int x, int y, int length, String name, char orientation){
-		super();
 		this.x = x;
 		this.y = y;
 		this.length = length;

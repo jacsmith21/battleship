@@ -7,12 +7,14 @@ import java.util.ArrayList;
 
 /** TO DO
 	1. Add font / background colors to code so nothing is hard coded in and we can easily switch them in the settings (LAST)
-	3. Highlight ships when selected during ship set up
 	5. Make commander messsage look better (LAST)
 	6. Add theme music (LAST)
 	7. Add hit / miss sounds (LAST)
-	10. Finish endgame method
+	10. Add endgame screen popup
 	11. Add checks for negative numbers in snap
+	12. fix drag bug
+	13. Make submit / rotate unclickable and white text
+	14. Commander message error, resets the ships
 */
 
 public class Game extends JPanel implements MouseListener, MouseMotionListener, ActionListener{
@@ -136,6 +138,7 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener, 
 		userButtons = setGrid(userBoard); //setting up user grid to blue
 		enemyButtons = setGrid(enemyBoard); //setting up the enemy grid to blue
 		setUnclickable(enemyButtons);
+		setUnclickable(userButtons);
 		commander.setText("<html>Set your <br>ships<br>commander!</html>");
     }
 
