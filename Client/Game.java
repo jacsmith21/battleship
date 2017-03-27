@@ -11,10 +11,6 @@ import java.util.ArrayList;
 	6. Add theme music (LAST)
 	7. Add hit / miss sounds (LAST)
 	10. Add endgame screen popup
-	11. Add checks for negative numbers in snap
-	12. fix drag bug
-	13. Make submit / rotate unclickable and white text
-	14. Commander message error, resets the ships
 */
 
 public class Game extends JPanel implements MouseListener, MouseMotionListener, ActionListener{
@@ -50,7 +46,7 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener, 
 	final String ERROR = "err";
 	final Color WATER = new Color(64,164,223);
 	final Color WATER_BORDER = new Color(82,187,245);
-	final Color HIT = new Color(20, 20, 20);
+	final Color HIT = new Color(255, 40, 40);
 	final Color MISS = new Color(255,255,255);
 	final Color SHIP = new Color(100,100,100);
 	final Color SELECTED = new Color(255,250,205);
@@ -60,7 +56,7 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener, 
 	
 	//Initial ship info
 	final int[] X_POSITIONS = {0, 1, 2, 3};
-	final int[] Y_POSITIONS = {0, 0, 0, 0};
+	final int[] Y_POSITIONS = {0, 1, 0, 1};
 	final int[] LENGTHS = {5,4,3,2};
 	final char[] ORIENTATIONS = {VERTICLE,VERTICLE,VERTICLE,VERTICLE}; //v = VERTICLE, h = HORIZONTAL
 	final String[] NAMES = {"AC","CR","SB","FR"};
@@ -133,6 +129,7 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener, 
 		for(int i = 0; i < X_POSITIONS.length; i++){
 			ships[i] = createShip(X_POSITIONS[i], Y_POSITIONS[i], LENGTHS[i], NAMES[i], ORIENTATIONS[i]);
 			if(DEBUG) System.out.println("Created ship at (" + ships[i].getXCell() + "," + ships[i].getYCell() + ")");
+			setShip(ships[i],userBoard);
 		}
 		
 		userButtons = setGrid(userBoard); //setting up user grid to blue
@@ -147,25 +144,32 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener, 
 	}
 	
 	private ShipLabel createShip(int x, int y, int length, String name, char orientation){
-		if(DEBUG) System.out.println("Setting ship at x: " + y + ", y: " + x + ", Dememsion: " + SIDE + ", " + SIDE*length);
 		ShipLabel ship = new ShipLabel(x, y, length, name, orientation);
-		c = new GridBagConstraints();
-		c.gridheight = length; //So that it is able to span multiple grid cells
-		ship.setOpaque(true);
-		if(orientation == HORIZONTAL) ship.setPreferredSize( new Dimension(length*SIDE,SIDE) ); 
-        else ship.setPreferredSize( new Dimension(SIDE, length*SIDE) );
 		ship.setBorder(BorderFactory.createLineBorder(WATER_BORDER));
 		ship.addMouseMotionListener(this);
         ship.addMouseListener(this);
-		c.gridheight = length; //Settings span to length
         ship.setBackground(SHIP);
+        ship.setOpaque(true);
+        if(orientation == HORIZONTAL) ship.setPreferredSize( new Dimension(length*SIDE,SIDE) ); 
+        else ship.setPreferredSize( new Dimension(SIDE, length*SIDE) );
+        return ship;
+	}
+	
+	public void setShip(ShipLabel ship, JPanel board){
+		int x = ship.getXCell();
+		int y = ship.getYCell();
+		int length = ship.getLength();
+		if(DEBUG) System.out.println("Setting ship at x: " + x + ", y: " + y);
+		c = new GridBagConstraints();
+		c.gridheight = length; //So that it is able to span multiple grid cells
         c.gridx = x;
         c.gridy = y;
 		c.weightx = 1; //To avoid clumping
 		c.weighty = 1; //To avoid clumping
-		userBoard.add(ship, c);
-		return ship;
+		board.add(ship, c);
 	}
+	
+	
 	
 	/** Sets the grid of the passed in GridLayout panel, initializes everything to water
 		@param panel the panel to set the grid
@@ -182,17 +186,31 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener, 
 				c.weightx = 1; //To avoid clumping
 				c.weighty  = 1; //To avoid clumping
 				GridButton button = new GridButton(j, i);
+				button.setOpaque(true);
 				button.setBorderPainted(true);
 				button.setBackground(WATER);
 				button.setBorder(BorderFactory.createLineBorder(WATER_BORDER));
-				//button.addActionListener(this);
+				button.addActionListener(this);
 				button.setPreferredSize(new Dimension(SIDE,SIDE));
 				temp[i][j] = button;
 				panel.add(button, c);
-				button.addActionListener(this);
 			}
 		}
 		return temp;
+	}
+	
+	private void refreshUserButtons(){
+		for(int i = 0; i < userButtons.length; i++){
+			for(int j = 0; j < userButtons[0].length; j++){
+				c = new GridBagConstraints();
+				c.gridx = i;
+				c.gridy = j;
+				c.weightx = 1; //To avoid clumping
+				c.weighty  = 1; //To avoid clumping
+				userBoard.remove(userButtons[i][j]);
+				userBoard.add(userButtons[i][j],c);
+			}
+		}
 	}
 	
 	/** Sets the buttons in the array to non clickable
@@ -245,7 +263,7 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener, 
 	/** Starts the defense turn for the user (changes game states, new thread to read message) */
 	private void startDefense(){
 		if(DEBUG) System.out.println("On defense");
-		//commander.setText("<html>Defend!</html>");
+		commander.setText("<html>Defend!</html>");
 		attack = false;
 		defend = true;
 		newMessageThread(); //Gets message on defense
@@ -254,7 +272,7 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener, 
 	/** Starts the attack turn for the user (changes game states, commander message) */
 	private void startOffense(){
 		if(DEBUG) System.out.println("On offense");
-		//commander.setText("<html>Attack!</html>");
+		commander.setText("<html>Attack!</html>");
 		attack = true;
 		defend = false;
 	}
@@ -282,10 +300,10 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener, 
 				settingShips = false;
 				
 				//Removing rotate/submit buttons
-				//submitButton.setEnabled(false); 
-				//rotateButton.setEnabled(false);
-				//submitButton.setText("");
-				//rotateButton.setText("");
+				submitButton.setEnabled(false); 
+				rotateButton.setEnabled(false);
+				submitButton.setText("");
+				rotateButton.setText("");
 				
 				startGameplay(message);
 			}else{
@@ -388,7 +406,6 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener, 
 	}
 
     public void jButton6ActionPerformed(java.awt.event.ActionEvent evt){ //ROTATING
-		if(DEBUG) System.out.println("Rotating");
 		for(ShipLabel ship : ships){
 			if(ship.isSelected()){
 				int length = ship.getLength()*SIDE;
@@ -405,10 +422,24 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener, 
 						ship.setBounds(ship.getX(), ship.getY(), SIDE, length);
 					}
 				}
-				if(ship.getOrientation() == HORIZONTAL) ship.setOrientation(VERTICLE);
-				else ship.setOrientation(HORIZONTAL);
-				ship.setX(ship.getX()/SIDE);
-				ship.setX(ship.getY()/SIDE);
+				
+				int newXCell = ship.getX()/SIDE;
+				int newYCell = ship.getY()/SIDE;
+				
+				if(ship.getOrientation() == HORIZONTAL){
+					if(DEBUG) System.out.println("Rotating to verticle @ x: " + newXCell + ", y: " + newYCell);
+					ship.setOrientation(VERTICLE);
+				}
+				else{
+					if(DEBUG) System.out.println("Rotating to horizontal @ x: " + newXCell + ", y: " + newYCell);
+					ship.setOrientation(HORIZONTAL);
+				}
+				ship.setX(newXCell);
+				ship.setY(newYCell);
+				setShip(ship, userBoard);
+				refreshUserButtons();
+				userBoard.invalidate();
+				userBoard.repaint();
 			}
 		}
 	}
@@ -459,6 +490,9 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener, 
 							cellX = MAX_COL-length; //new x cell
 							newX = SIDE*(cellX);
 							if(DEBUG) System.out.println("Error: new x cell: " + cellX);
+						}else if(newX < 0){
+							cellX = 0;
+							newX = 0;
 						} 
 						if(newY + SIDE > WIDTH){
 							cellY = MAX_ROW-1; //new y cell
@@ -470,6 +504,9 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener, 
 							cellY = MAX_ROW-length;
 							newY = SIDE*(cellY); //new y cell
 							if(DEBUG) System.out.println("Error new y cell: " + cellY);
+						}else if(newY < 0){
+							cellY = 0;
+							newY = 0;
 						}
 						if(newX + SIDE > WIDTH){
 							cellX = MAX_COL-1; //new x cell
@@ -480,6 +517,11 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener, 
 					ship.setBounds(newX, newY , ship.getWidth(), ship.getHeight());
 					ship.setX(cellX);
 					ship.setY(cellY);
+					userBoard.remove(ship);
+					setShip(ship,userBoard);
+					refreshUserButtons();
+					userBoard.invalidate();
+					userBoard.repaint();
 					break;
 				}
 			}
@@ -490,17 +532,11 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener, 
 		if(settingShips){	
 			for(ShipLabel ship : ships){
 				if(ship.isDrag()){
-					int newX = userBoard.getX();
-					int newY = userBoard.getY();
 					int x = ship.getX();
 					int y = ship.getY();
 					mouseX = e.getX();
 					mouseY = e.getY();
-					if(DEBUG) System.out.println("panel: " + newX + "," + newY);
-					if(DEBUG) System.out.println("x: " + x + ",y: " + y);
-					if(DEBUG) System.out.println("mousex: " + mouseX + ",mousey: " + mouseY);
-					if(DEBUG) System.out.println("x: " + (newX + mouseX + x) + ", y: " + (newY + mouseY + y) + "\n");
-					ship.setBounds(newX + mouseX + x, newY + mouseY + y, ship.getWidth(), ship.getHeight());
+					ship.setBounds(mouseX + x, mouseY + y, ship.getWidth(), ship.getHeight());
 				}
 			}
 		}
@@ -518,8 +554,8 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener, 
         jButton5 = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
-        jPanel4 = new javax.swing.JPanel();
+        jPanel2 = new GridPanel();
+        jPanel4 = new GridPanel();
         jLabel6 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -763,22 +799,5 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener, 
                     .addComponent(jButton4)
                     .addComponent(jButton6)))
         );
-		
-		
-		//Remving as this class now extends a jPanel
-		/*
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-
-        pack();
-		*/
     }	
 }

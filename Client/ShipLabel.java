@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.*;
 
 public class ShipLabel extends JLabel{
 	private int x;
@@ -8,6 +9,8 @@ public class ShipLabel extends JLabel{
 	private char orientation;
 	private boolean drag;
 	private boolean selected;
+
+	private final boolean DEBUG = true;
 	
 	public ShipLabel(int x, int y, int length, String name, char orientation){
 		this.x = x;
@@ -42,4 +45,7 @@ public class ShipLabel extends JLabel{
 	public void setDrag(boolean drag){ this.drag = drag; }
 	
 	public void setSelected(boolean selected){ this.selected = selected; }
+
+	
+
 }
