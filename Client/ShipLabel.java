@@ -36,9 +36,9 @@ public class ShipLabel extends JLabel{
 	
 	public char getOrientation(){ return orientation; }
 	
-	public void setX(int x){ this.x = x; }
+	public void setXCell(int x){ this.x = x; }
 	
-	public void setY(int y){ this.y = y; }
+	public void setYCell(int y){ this.y = y; }
 	
 	public void setOrientation(char orientation){ this.orientation = orientation; }
 	

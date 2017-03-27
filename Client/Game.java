@@ -10,7 +10,6 @@ import java.util.ArrayList;
 	5. Make commander messsage look better (LAST)
 	6. Add theme music (LAST)
 	7. Add hit / miss sounds (LAST)
-	10. Add endgame screen popup
 */
 
 public class Game extends JPanel implements MouseListener, MouseMotionListener, ActionListener{
@@ -20,20 +19,20 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener, 
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
+    private ShipStatusIcon jLabel10;
+    private ShipStatusIcon jLabel11;
+    private ShipStatusIcon jLabel12;
+    private ShipStatusIcon jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel2;
+    private ShipStatusIcon jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
+    private ShipStatusIcon jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
+    private ShipStatusIcon jLabel7;
+    private ShipStatusIcon jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -53,6 +52,8 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener, 
 	final int WIDTH = 420; //Enemy / user board width
 	final char HORIZONTAL = 'h';
 	final char VERTICLE = 'v';
+	final ImageIcon GREEN_ICON = new ImageIcon(  getClass().getResource("/green_circle.png")  );
+	final ImageIcon RED_ICON = new ImageIcon(  getClass().getResource("/red_circle.png")  );
 	
 	//Initial ship info
 	final int[] X_POSITIONS = {0, 1, 2, 3};
@@ -87,7 +88,8 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener, 
 	private JButton rotateButton;
 	private GridButton button; //The last GridButton that has been clicked on
 	private ShipLabel[] ships;
-	
+	private ShipStatusIcon[] userShipStatusIcons;
+	private ShipStatusIcon[] enemyShipStatusIcons;
 	
 	//Font and background color (always Black or White)
 	private Color fontColor;
@@ -107,7 +109,7 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener, 
 		commander = jLabel4;
 		submitButton = jButton4;
 		rotateButton = jButton6;
-		username = jLabel15;
+		username = jLabel16;
 		
 		userBoard.setLayout(new GridBagLayout());
 		enemyBoard.setLayout(new GridBagLayout());
@@ -120,13 +122,13 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener, 
 		defend = false;
 		gameComplete = false;
 		
-		/*
+		
 		//Connecting to server
 		Scanner sc = new Scanner(System.in);
 		int port = sc.nextInt();
 		server = new ClientConnection();
 		server.createConnection(port);
-		*/
+		
 		
 		//Initializing boards
 		ships = new ShipLabel[X_POSITIONS.length];
@@ -136,9 +138,22 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener, 
 			setShip(ships[i],userBoard);
 		}
 		
+		//Initializing status icons (green dots)
+		userShipStatusIcons = new ShipStatusIcon[ships.length];
+		enemyShipStatusIcons = new ShipStatusIcon[ships.length];
+		userShipStatusIcons[0] = jLabel2;
+		userShipStatusIcons[1] = jLabel5;
+		userShipStatusIcons[2] = jLabel7;
+		userShipStatusIcons[3] = jLabel8;
+		enemyShipStatusIcons[0] = jLabel10;
+		enemyShipStatusIcons[1] = jLabel11;
+		enemyShipStatusIcons[2] = jLabel12;
+		enemyShipStatusIcons[3] = jLabel13;
+		
 		userButtons = setGrid(userBoard); //setting up user grid to blue
 		enemyButtons = setGrid(enemyBoard); //setting up the enemy grid to blue
 		setUnclickable(enemyButtons);
+		setUnclickable(userButtons);
 		commander.setText("<html>Set your <br>ships<br>commander!</html>");
     }
 
@@ -252,8 +267,6 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener, 
 		@param player the message from the server acknoledging the player number
 	*/
 	private void startGameplay(String message){
-		setUnclickable(userButtons);
-		refreshUserButtons();
 		setClickable(enemyButtons);
 		if(message.contains("1")){
 			if(DEBUG) System.out.println("Player one ready to play");
@@ -346,7 +359,11 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener, 
 	*/
 	private void updateEnemyBoard(String message){
 		if(message.contains("sunk")){
+			String ship = (message.split(" "))[1];
 			button.setBackground(HIT); //button = most recent clicked button
+			for(ShipStatusIcon icon : enemyShipStatusIcons){
+				if((icon.getName()).equals(ship)) icon.setIcon(RED_ICON);
+			}
 		}else if(message.contains("hit")){
 			button.setBackground(HIT);
 		}else{
@@ -358,7 +375,11 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener, 
 		int[] coordinate = getRowCol( (message.split(","))[0] );
 		button = userButtons[coordinate[0]][coordinate[1]]; //[row][col]
 		if(message.contains("sunk")){
+			String ship = (  ((message.split(","))[1]  ).split(" "))[1];
 			button.setBackground(HIT);
+			for(ShipStatusIcon icon : userShipStatusIcons){
+				if((icon.getName()).equals(ship)) icon.setIcon(RED_ICON);
+			}
 		}else if(message.contains("hit")){
 			button.setBackground(HIT);
 		}else{
@@ -443,8 +464,8 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener, 
 					if(DEBUG) System.out.println("Rotating to horizontal @ x: " + newXCell + ", y: " + newYCell);
 					ship.setOrientation(HORIZONTAL);
 				}
-				ship.setX(newXCell);
-				ship.setY(newYCell);
+				ship.setXCell(newXCell);
+				ship.setYCell(newYCell);
 				setShip(ship, userBoard);
 				refreshUserButtons();
 				userBoard.invalidate();
@@ -524,8 +545,8 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener, 
 						}        
 					}
 					ship.setBounds(newX, newY , ship.getWidth(), ship.getHeight());
-					ship.setX(cellX);
-					ship.setY(cellY);
+					ship.setXCell(cellX);
+					ship.setYCell(cellY);
 					userBoard.remove(ship);
 					setShip(ship,userBoard);
 					refreshUserButtons();
@@ -565,16 +586,16 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener, 
         jLabel4 = new javax.swing.JLabel();
         jPanel2 = new GridPanel();
         jPanel4 = new GridPanel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel(); 
+        jLabel2 = new ShipStatusIcon("AC"); //USER AC
+        jLabel5 = new ShipStatusIcon("CR"); //USER CR
+        jLabel7 = new ShipStatusIcon("SB"); //USER SB
+        jLabel8 = new ShipStatusIcon("FR"); //USER FR
         jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
+        jLabel10 = new ShipStatusIcon("FR"); //USER AC
+        jLabel11 = new ShipStatusIcon("SB"); //USER CR
+        jLabel12 = new ShipStatusIcon("CR"); //USER SB
+        jLabel13 = new ShipStatusIcon("AC"); //USER FR
         jLabel14 = new javax.swing.JLabel();
         jButton4 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
@@ -695,10 +716,10 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener, 
         });
 
         jLabel15.setFont(new java.awt.Font("Orbitron", 0, 24)); // NOI18N
-        jLabel15.setText("username");
+        jLabel15.setText("Enemy");
 
         jLabel16.setFont(new java.awt.Font("Orbitron", 0, 24)); // NOI18N
-        jLabel16.setText("Enemy");
+        jLabel16.setText("username");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -750,9 +771,9 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener, 
                             .addComponent(jLabel10))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel9)
-                        .addGap(18, 18, 18)
+                        .addGap(20, 20, 20)
                         .addComponent(jLabel15)))
-                .addGap(34, 34, 34))
+                .addGap(32, 32, 32))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
