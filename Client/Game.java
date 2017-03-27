@@ -59,7 +59,7 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener, 
 	final int[] X_POSITIONS = {0, 1, 2, 3};
 	final int[] Y_POSITIONS = {0, 1, 0, 1};
 	final int[] LENGTHS = {5,4,3,2};
-	final char[] ORIENTATIONS = {VERTICLE,VERTICLE,VERTICLE,VERTICLE}; //v = VERTICLE, h = HORIZONTAL
+	final char[] ORIENTATIONS = {VERTICLE,VERTICLE,VERTICLE,HORIZONTAL}; //v = VERTICLE, h = HORIZONTAL
 	final String[] NAMES = {"AC","CR","SB","FR"};
 	
 	//for debugging
@@ -177,10 +177,18 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener, 
 		int x = ship.getXCell();
 		int y = ship.getYCell();
 		int length = ship.getLength();
-		if(DEBUG) System.out.println("Setting ship at x: " + x + ", y: " + y);
+		
 		c = new GridBagConstraints();
-		c.gridheight = length; //So that it is able to span multiple grid cells
-        c.gridx = x;
+		if(ship.getOrientation() == VERTICLE){
+			if(DEBUG) System.out.println("Setting ship vertically @ x: " + x + ", y: " + y);
+			ship.setPreferredSize( new Dimension(SIDE,length*SIDE) );
+			c.gridheight = length; //So that it is able to span multiple grid cells
+        }else{
+			if(DEBUG) System.out.println("Setting ship horizontally x: " + x + ", y: " + y);
+			ship.setPreferredSize( new Dimension(length*SIDE,SIDE) );
+			c.gridwidth = length;
+		}
+		c.gridx = x;
         c.gridy = y;
 		c.weightx = 1; //To avoid clumping
 		c.weighty = 1; //To avoid clumping
