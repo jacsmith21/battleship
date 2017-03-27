@@ -5,7 +5,7 @@ import java.awt.event.*;
 import java.util.Scanner;
 import java.util.ArrayList;
 
-/** TO DO
+/** TODO
 	1. Add font / background colors to code so nothing is hard coded in and we can easily switch them in the settings (LAST)
 	5. Make commander messsage look better (LAST)
 	6. Add theme music (LAST)
@@ -79,6 +79,7 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener, 
 	private JLabel commander; //Text from the commander
 	private JPanel gamePanel; //Top level panel
 	private JPanel userBoard;
+	private JLabel username;
 	private JPanel enemyBoard;
 	private GridButton[][] userButtons;
 	private GridButton[][] enemyButtons;
@@ -106,6 +107,7 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener, 
 		commander = jLabel4;
 		submitButton = jButton4;
 		rotateButton = jButton6;
+		username = jLabel15;
 		
 		userBoard.setLayout(new GridBagLayout());
 		enemyBoard.setLayout(new GridBagLayout());
@@ -118,11 +120,13 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener, 
 		defend = false;
 		gameComplete = false;
 		
+		/*
 		//Connecting to server
 		Scanner sc = new Scanner(System.in);
 		int port = sc.nextInt();
 		server = new ClientConnection();
 		server.createConnection(port);
+		*/
 		
 		//Initializing boards
 		ships = new ShipLabel[X_POSITIONS.length];
@@ -135,7 +139,6 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener, 
 		userButtons = setGrid(userBoard); //setting up user grid to blue
 		enemyButtons = setGrid(enemyBoard); //setting up the enemy grid to blue
 		setUnclickable(enemyButtons);
-		setUnclickable(userButtons);
 		commander.setText("<html>Set your <br>ships<br>commander!</html>");
     }
 
@@ -248,10 +251,11 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener, 
 	/** Starts the gameplay for both player one and player 2
 		@param player the message from the server acknoledging the player number
 	*/
-	private void startGameplay(String player){
-		//setUnclickable(userButtons);
+	private void startGameplay(String message){
+		setUnclickable(userButtons);
+		refreshUserButtons();
 		setClickable(enemyButtons);
-		if(player.contains("1")){
+		if(message.contains("1")){
 			if(DEBUG) System.out.println("Player one ready to play");
 			newMessageThread(); //gets ok message
 		}else{
@@ -277,6 +281,14 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener, 
 		defend = false;
 	}
 	
+	/**Send a message, either to the server or to the command prompt
+		@param message the string message to send
+	*/
+	private void sendMessage(String message){
+		server.send(message);
+		if(DEBUG) System.out.println("SENDING: " + message);
+	}
+	
 	/**Recieves a message, either from the server or from the command line
 		@return the recieved string message
 	*/
@@ -295,19 +307,16 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener, 
 			updateUserBoard(message); //updates GUI
 			if(message.contains("loss")) endGame(message);
 			else startOffense();
-		}else if(settingShips){ //Setting ships
+		}else if(settingShips){
 			if(!message.equals(ERROR)){
 				settingShips = false;
-				
-				//Removing rotate/submit buttons
-				submitButton.setEnabled(false); 
-				rotateButton.setEnabled(false);
-				submitButton.setText("");
-				rotateButton.setText("");
-				
+				gamePanel.remove(submitButton);
+				gamePanel.remove(rotateButton);
+				gamePanel.revalidate();
+				gamePanel.repaint();
 				startGameplay(message);
 			}else{
-				commander.setText("<html>Error!</html>");
+				commander.setText("<html>Error!<br>Try again!</html>");
 				if(DEBUG) System.out.println("Error with ship locations");
 			}
 		}
@@ -315,16 +324,13 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener, 
 	
 	private void endGame(String message){
 		if(DEBUG) System.out.println("Starting end game process");
+		attack = false;
+		defend = false;
 		gameComplete = true;
+		if(message.contains("win")) {} //TODO display popup
+		//TODO lanch leaderboards
 	}
 	
-	/**Send a message, either to the server or to the command prompt
-		@param message the string message to send
-	*/
-	private void sendMessage(String message){
-		server.send(message);
-		if(DEBUG) System.out.println("SENDING: " + message);
-	}
 	
 	/** The actionPerformed method for the grid buttons */
 	public void actionPerformed(ActionEvent e){
@@ -335,9 +341,12 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener, 
 		}
 	}
 	
+	/** Updates the enemy's board depending on the message recieved back from the server
+		@param message the message recieved back from the server
+	*/
 	private void updateEnemyBoard(String message){
 		if(message.contains("sunk")){
-			button.setBackground(HIT);
+			button.setBackground(HIT); //button = most recent clicked button
 		}else if(message.contains("hit")){
 			button.setBackground(HIT);
 		}else{
@@ -346,7 +355,7 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener, 
 	}
 	
 	private void updateUserBoard(String message){
-		int[] coordinate = getIntCoordinates( (message.split(","))[0] );
+		int[] coordinate = getRowCol( (message.split(","))[0] );
 		button = userButtons[coordinate[0]][coordinate[1]]; //[row][col]
 		if(message.contains("sunk")){
 			button.setBackground(HIT);
@@ -357,7 +366,7 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener, 
 		}
 	}
 	
-	private int[] getIntCoordinates(String coordinate){
+	private int[] getRowCol(String coordinate){
 		char c = coordinate.charAt(0);
         int x = c - 65;
 		int y = Integer.parseInt(coordinate.substring(1)) - 1; //Starts at 0
@@ -367,17 +376,17 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener, 
 	
     public void jButton5ActionPerformed(java.awt.event.ActionEvent evt) { //HOME
 		System.out.println("home");
-		//TO DO
+		//TODO
 	}
 
     public void jButton2ActionPerformed(java.awt.event.ActionEvent evt) { //HELP
         System.out.println("help");
-		//TO DO
+		//TODO
 	}
 
     public void jButton3ActionPerformed(java.awt.event.ActionEvent evt) { //SETTINGS
         System.out.println("settings");
-		//TO DO
+		//TODO
 	}
 
 	/** The submit button on the board, sends the ships location to the server and starts a new message thread
@@ -689,7 +698,7 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener, 
         jLabel15.setText("username");
 
         jLabel16.setFont(new java.awt.Font("Orbitron", 0, 24)); // NOI18N
-        jLabel16.setText("username");
+        jLabel16.setText("Enemy");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
