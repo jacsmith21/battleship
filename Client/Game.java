@@ -73,7 +73,7 @@ public class Game extends JPanel {
 		submitButton = jButton4;
 		rotateButton = jButton6;
 		username = jLabel16;
-		
+	
 		//Setting initial game states
 		settingShips = true;
 		attack = false; 
