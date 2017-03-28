@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 
 public class ShipLabel extends JLabel{
 	private int x;
@@ -9,10 +10,11 @@ public class ShipLabel extends JLabel{
 	private char orientation;
 	private boolean drag;
 	private boolean selected;
+	private GridPanel panel;
 
 	private final boolean DEBUG = true;
 	
-	public ShipLabel(int x, int y, int length, String name, char orientation){
+	public ShipLabel(int x, int y, int length, String name, char orientation, GridPanel panel){
 		this.x = x;
 		this.y = y;
 		this.length = length;
@@ -20,6 +22,13 @@ public class ShipLabel extends JLabel{
 		this.orientation = orientation;
 		this.drag = false;
 		this.selected = false;
+		
+		//super calls
+		addMouseMotionListener(panel);
+		addMouseListener(panel);
+		setBorder(BorderFactory.createLineBorder(panel.WATER_BORDER));
+		setBackground(panel.SHIP);
+		setOpaque(true);
 	}
 	
 	public int getXCell(){ return x; }

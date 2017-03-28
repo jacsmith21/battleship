@@ -18,7 +18,7 @@ public class Connection{
         }
     }
     
-    public String recieve(){
+    public String receive(){
         String text = null;
         try{
 			text = in.readLine();
