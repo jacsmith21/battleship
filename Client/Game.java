@@ -40,6 +40,10 @@ public class Game extends JPanel {
 	final int WIDTH = 420; //Enemy / user board width
 	final ImageIcon GREEN_ICON = new ImageIcon(  getClass().getResource("/green_circle.png")  );
 	final ImageIcon RED_ICON = new ImageIcon(  getClass().getResource("/red_circle.png")  );
+	final ImageIcon BLACK_SHIPS = new ImageIcon(  getClass().getResource("/black_ships.png")  );
+	final ImageIcon WHITE_SHIPS = new ImageIcon(  getClass().getResource("/white_ships.png")  );
+	final ImageIcon WHITE_COMMANDER = new ImageIcon(  getClass().getResource("/white_commander.png")  );
+	final ImageIcon BLACK_COMMANDER = new ImageIcon(  getClass().getResource("/black_commander.png")  );
 
 	//Game states
 	private boolean settingShips;
@@ -52,11 +56,18 @@ public class Game extends JPanel {
 	private JPanel gamePanel; //Top level panel that is added to this
 	private GridPanel userBoard;
 	private GridPanel enemyBoard;
-	private JButton submitButton;
-	private JButton rotateButton;
+	private JButton submit;
+	private JButton rotate;
 	private ShipStatusIcon[] userShipStatusIcons;
 	private ShipStatusIcon[] enemyShipStatusIcons;
 	private JLabel username;
+	private JLabel enemy;
+	private JButton home;
+	private JButton help;
+	private JButton settings;
+	private JLabel ships1;
+	private JLabel ships2;
+	private JLabel commanderImage;
 	
 	final boolean DEBUG = true;
 	
@@ -70,9 +81,16 @@ public class Game extends JPanel {
 		userBoard = jPanel2;
 		enemyBoard = jPanel4;
 		commander = jLabel4;
-		submitButton = jButton4;
-		rotateButton = jButton6;
+		submit = jButton4;
+		rotate = jButton6;
 		username = jLabel16;
+		home = jButton5;
+		settings = jButton3;
+		help = jButton2;
+		enemy = jLabel15;
+		ships1 = jLabel6;
+		ships2 = jLabel9;
+		commanderImage = jLabel3;
 	
 		//Setting initial game states
 		settingShips = true;
@@ -102,6 +120,31 @@ public class Game extends JPanel {
 	
 	public boolean isSettingShips(){
 		return settingShips;
+	}
+	
+	public void setBackgroundColor(Color color){
+		if(color == color.WHITE){
+			ships1.setIcon(BLACK_SHIPS);
+			ships2.setIcon(BLACK_SHIPS);
+			commanderImage.setIcon(BLACK_COMMANDER);
+		}else{ 
+			ships1.setIcon(WHITE_SHIPS);
+			ships2.setIcon(WHITE_SHIPS);
+			commanderImage.setIcon(WHITE_COMMANDER);
+		}
+		gamePanel.setBackground(color);
+		this.setBackground(color);
+	}
+	
+	public void setFontColor(Color color){
+		rotate.setForeground(color);
+		submit.setForeground(color);
+		enemy.setForeground(color);
+		home.setForeground(color);
+		settings.setForeground(color);
+		help.setForeground(color);
+		username.setForeground(color);
+		commander.setForeground(color);
 	}
 	
 	/* Initializes status icons (green dots) */
@@ -189,8 +232,8 @@ public class Game extends JPanel {
 		}else if(settingShips){
 			if(!message.equals(ERROR)){
 				settingShips = false;
-				gamePanel.remove(submitButton);
-				gamePanel.remove(rotateButton);
+				gamePanel.remove(submit);
+				gamePanel.remove(rotate);
 				gamePanel.revalidate();
 				gamePanel.repaint();
 				this.startGameplay(message);
@@ -222,18 +265,15 @@ public class Game extends JPanel {
 	}
 	
     public void jButton5ActionPerformed(java.awt.event.ActionEvent evt) { //HOME
-		System.out.println("home");
-		//TODO
+		client.displayHome();
 	}
 
     public void jButton2ActionPerformed(java.awt.event.ActionEvent evt) { //HELP
-        System.out.println("help");
-		//TODO
+		client.displayHelp();
 	}
 
     public void jButton3ActionPerformed(java.awt.event.ActionEvent evt) { //SETTINGS
-        System.out.println("settings");
-		//TODO
+		client.displaySettings();
 	}
 
 	/** The submit button on the board, sends the ships location to the server and starts a new message thread
@@ -318,7 +358,7 @@ public class Game extends JPanel {
             }
         });
 
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/commander.png"))); // NOI18N
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/black_commander.png"))); // NOI18N
 
         jLabel4.setFont(new java.awt.Font("Orbitron", 0, 11)); // NOI18N
 
@@ -333,7 +373,7 @@ public class Game extends JPanel {
         //jPanel4.setLayout(new java.awt.GridLayout(10,10));
 
         jLabel6.setFont(new java.awt.Font("Orbitron", 0, 11)); // NOI18N
-        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ships.png"))); // NOI18N
+        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/black_ships.png"))); // NOI18N
 
         jLabel2.setIcon( new javax.swing.ImageIcon(getClass().getResource("/green_circle.png") )); // NOI18N
         jLabel2.setToolTipText("");
@@ -348,7 +388,7 @@ public class Game extends JPanel {
         jLabel8.setToolTipText("");
 
         jLabel9.setFont(new java.awt.Font("Orbitron", 0, 11)); // NOI18N
-        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ships.png"))); // NOI18N
+        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/black_ships.png"))); // NOI18N
 
         jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/green_circle.png"))); // NOI18N
         jLabel10.setToolTipText("");

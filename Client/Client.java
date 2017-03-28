@@ -63,15 +63,22 @@ public class Client extends JFrame{
 	
 	public void displaySettings(){
 		if(DEBUG) System.out.println("Displaying settings dialogue");
-		refreshColors();
+		switchColors();
 	}
 	
-	public void refreshColors(){
-		fontColor = Color.WHITE;
-		backgroundColor = Color.BLACK;
+	public void switchColors(){
+		if(fontColor == Color.WHITE) fontColor = Color.BLACK;
+		else fontColor = Color.WHITE;
+		if(backgroundColor == Color.BLACK) backgroundColor = Color.WHITE;
+		else backgroundColor = Color.BLACK;
 		pregame.setBackgroundColor(backgroundColor);
 		pregame.setFontColor(fontColor);
+		pregame.repaint();
+		game.setBackgroundColor(backgroundColor);
+		game.setFontColor(fontColor);
+		game.repaint();
 	}
+	
 	
 	public Color getFontColor(){ return fontColor; }
 	

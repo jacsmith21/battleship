@@ -50,7 +50,7 @@ public class Pregame extends JPanel implements ActionListener{
 		play.setFont( new Font("Orbitron", 0, 15) );
 		play.setOpaque(true);
 		play.setBorderPainted(true);
-		menu.add(play);		
+		menu.add(play);
 		
 		this.addActionListeners();
 		this.setBackgroundColor(client.getBackgroundColor());
