@@ -114,24 +114,8 @@ public class Register extends JPanel implements ActionListener{
 	
 	public void actionPerformed(ActionEvent e){
 		if(e.getSource() == register){
-			String toSend = "N," + username.getText();
-			client.send(toSend);
-			System.out.println("Send "+toSend);
-			String response = client.receive();
-			if(response.equals("ack")){
-				client.send(password.getText());
-				response = client.receive();
-				if(!password.getText().equals(repassword.getText())){
-					response = "Passwords must match!";
-				}
-				if(response.equals("ack")){
-					client.startPregame(username.getText());
-				} else{
-					//label.setText(response);
-				}
-			} else{
-				//label.setText(response);
-			}
+			//TODO
+			client.startPregame();
 		}else if(e.getSource() == home){
 			client.displayHome();
 		}else if(e.getSource() == help){

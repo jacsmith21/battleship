@@ -106,23 +106,8 @@ public class Login extends JPanel implements ActionListener{
 	
 	public void actionPerformed(ActionEvent e){
 		if(e.getSource() == login){
-			String toSend = "R," + username.getText();
-			System.out.println(toSend);
-			client.send(toSend);
-			String response = client.receive();
-			System.out.println(response);
-			if(response.equals("ack")){
-				client.send(password.getText());
-				response = client.receive();
-				System.out.println(response);
-				if(response.equals("ack")){
-					client.startPregame(username.getText());
-				} else{
-					//label.setText(response);
-				}
-			} else{
-				//label.setText(response);
-			}
+			//TODO
+			client.startPregame();
 		}else if(e.getSource() == home){
 			client.displayHome();
 		}else if(e.getSource() == help){
