@@ -57,6 +57,10 @@ public class Pregame extends JPanel implements ActionListener{
 		this.add(pregame);
     }
 	
+	public void setName(String name){
+		jLabel4.setText("Welcome back, "+name+"!");
+	}
+	
 	public void addActionListeners(){
 		home.addActionListener(this);
 		settings.addActionListener(this);
@@ -156,7 +160,7 @@ public class Pregame extends JPanel implements ActionListener{
 
         jLabel4.setFont(new java.awt.Font("Orbitron", 0, 16)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel4.setText("Welcome back, username!");
+        jLabel4.setText("Welcome back, user!");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
