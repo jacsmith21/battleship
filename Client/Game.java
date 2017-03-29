@@ -1,14 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.Color;
 import java.awt.event.*;
-
-/** TODO
-	1. Add font / background colors to code so nothing is hard coded in and we can easily switch them in the settings (LAST)
-	5. Make commander messsage look better (LAST)
-	6. Add theme music (LAST)
-	7. Add hit / miss sounds (LAST)
-*/
 
 public class Game extends JPanel {
 	//NetBeans components
@@ -68,6 +60,8 @@ public class Game extends JPanel {
 	private JLabel ships1;
 	private JLabel ships2;
 	private JLabel commanderImage;
+	private JLabel battleshipTitle;
+	
 	
 	final boolean DEBUG = true;
 	
@@ -91,6 +85,7 @@ public class Game extends JPanel {
 		ships1 = jLabel6;
 		ships2 = jLabel9;
 		commanderImage = jLabel3;
+		battleshipTitle = jLabel14;
 	
 		//Setting initial game states
 		settingShips = true;
@@ -145,6 +140,7 @@ public class Game extends JPanel {
 		help.setForeground(color);
 		username.setForeground(color);
 		commander.setForeground(color);
+		battleshipTitle.setForeground(color);
 	}
 	
 	/* Initializes status icons (green dots) */

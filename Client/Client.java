@@ -3,6 +3,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Scanner;
 
+/** TODO
+	1. Add font / background colors to code so nothing is hard coded in and we can easily switch them in the settings (LAST)
+	5. Make commander messsage look better (LAST)
+	6. Add theme music (LAST)
+	7. Add hit / miss sounds (LAST)
+*/
+
 public class Client extends JFrame{
 	//general constants	
 	final int HEIGHT = 611;
@@ -16,6 +23,9 @@ public class Client extends JFrame{
 	private ClientConnection server;
 	private Pregame pregame;
 	private Game game;
+	private Register register;
+	private Login login;
+	private Initial initial;
 	
 	final boolean DEBUG = true;	
 		
@@ -28,6 +38,7 @@ public class Client extends JFrame{
 		this.setSize(WIDTH,HEIGHT);
 		this.setResizable(false);
 		cp = this.getContentPane(); //Getting content pane
+		
 		/*
 		Scanner sc = new Scanner(System.in);
 		int port = sc.nextInt();
@@ -36,16 +47,18 @@ public class Client extends JFrame{
 		*/
 		
 		//Game panel
+		register = new Register(this);
+		login = new Login(this);
 		pregame = new Pregame(this);
 		game = new Game(this); //Game panel
-		cp.add(pregame);
-		//this.setContentPane(pregame); //Setting panel to content pane
+		initial = new Initial(this);
+		cp.add(initial);
 		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.pack();
 	}
 	
-	public void play(){
+	public void startGame(){
 		if(DEBUG) System.out.println("Going from pregame to game screen!");
 		cp.remove(pregame);
 		cp.add(game);
@@ -53,12 +66,42 @@ public class Client extends JFrame{
 		cp.repaint();
 	}
 	
+	public void startPregame(){
+		if(DEBUG) System.out.println("Going from registration to the pregame!");
+		cp.remove(login);
+		cp.add(pregame);
+		cp.revalidate();
+		cp.repaint();
+	}
+	
+	public void startLogin(){
+		if(DEBUG) System.out.println("Starting registration!");
+		cp.remove(initial);
+		cp.add(login);
+		cp.revalidate();
+		cp.repaint();
+	}
+	
+	public void startRegister(){
+		if(DEBUG) System.out.println("Starting registration!");
+		cp.remove(initial);
+		cp.add(register);
+		cp.revalidate();
+		cp.repaint();
+	}
+	
+	public void returnHome(){
+		//TODO
+	}
+	
 	public void displayHome(){
 		if(DEBUG) System.out.println("Displaying home dialogue");
+		//TODO
 	}
 	
 	public void displayHelp(){
 		if(DEBUG) System.out.println("Displaying help dialogue");
+		//TODO
 	}
 	
 	public void displaySettings(){
@@ -77,6 +120,15 @@ public class Client extends JFrame{
 		game.setBackgroundColor(backgroundColor);
 		game.setFontColor(fontColor);
 		game.repaint();
+		register.setBackgroundColor(backgroundColor);
+		register.setFontColor(fontColor);
+		register.repaint();
+		login.setBackgroundColor(backgroundColor);
+		login.setFontColor(fontColor);
+		login.repaint();
+		initial.setBackgroundColor(backgroundColor);
+		initial.setFontColor(fontColor);
+		initial.repaint();
 	}
 	
 	

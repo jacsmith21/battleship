@@ -2,90 +2,120 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class Pregame extends JPanel implements ActionListener{
-	//NETBEANS
+public class Register extends JPanel implements ActionListener{
 	private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+	private javax.swing.JButton jButton1;
 	
 	//Components
-	private JPanel pregame; //Top level panel
+	private JPanel registerPanel; //Top level panel
 	private Client client; //Parent
-	private JPanel menu;
-	private JButton play;
+	private JPanel informationFields;
 	private JLabel shipImage; 
 	private JLabel battleshipTitle1;
 	private JLabel battleshipTitle2;
 	private JButton home;
 	private JButton help;
 	private JButton settings;
-	private JLabel returnMessage;
-	
-    public Pregame(Client client) {
+	private JButton register;
+	private JTextField username;
+	private JTextField password;
+	private JTextField repassword;
+
+    public Register(Client client){
 		this.client = client;
 		
 		//Init NETBEANS components
         initComponents();
 		
 		//better names
-		pregame = jPanel1;
-		menu = jPanel2;
+		registerPanel = jPanel1;
+		informationFields = jPanel2;
 		shipImage = jLabel2;
 		battleshipTitle1 = jLabel1;
 		battleshipTitle2 = jLabel3;
 		home = jButton5;
 		help =  jButton2;
 		settings = jButton3;
-		returnMessage = jLabel4;
+		register = jButton1;
 		
-		jPanel2.setLayout(new GridLayout(1,1));
-		play = new JButton("play");
-		play.setFont( new Font("Orbitron", 0, 15) );
-		play.setOpaque(true);
-		play.setBorderPainted(true);
-		menu.add(play);
+		//information boxes
+		informationFields.setLayout(new GridLayout(3,1));
+		username = new JTextField();
+		password = new JTextField();
+		repassword = new JTextField();
+		username.setText("username");
+		password.setText("password");
+		repassword.setText("re-enter password");
+		username.setHorizontalAlignment(JTextField.CENTER);
+		password.setHorizontalAlignment(JTextField.CENTER);
+		repassword.setHorizontalAlignment(JTextField.CENTER);
+		username.setFont( new Font("Orbitron", 0, 14) );
+		password.setFont( new Font("Orbitron", 0, 14) );
+		repassword.setFont( new Font("Orbitron", 0, 14) );
+		informationFields.add(username);
+		informationFields.add(password);
+		informationFields.add(repassword);
+		
+		register.setText("Register");
+		register.setFont( new Font("Orbitron", 0, 15) );
+		register.setOpaque(true);
+		register.setBorderPainted(true);
 		
 		this.addActionListeners();
 		this.setBackgroundColor(client.getBackgroundColor());
 		this.setFontColor(client.getFontColor());
-		this.add(pregame);
+		this.add(registerPanel);
     }
+	
+	public void formatTextField(JButton button){
+		button.setFont( new Font("Orbitron", 0, 15) );
+		button.setOpaque(false);
+		button.setBorderPainted(true);
+	}
 	
 	public void addActionListeners(){
 		home.addActionListener(this);
 		settings.addActionListener(this);
 		help.addActionListener(this);
-		play.addActionListener(this);
+		register.addActionListener(this);
 	}
 	
 	public void setFontColor(Color color){
-		play.setForeground(color);
-		play.setBorder(BorderFactory.createLineBorder(color));
+		register.setForeground(color);
+		register.setBorder(BorderFactory.createLineBorder(color));
 		battleshipTitle1.setForeground(color);
 		battleshipTitle2.setForeground(color);
 		home.setForeground(color);
 		help.setForeground(color);
-		returnMessage.setForeground(color);
 		settings.setForeground(color);
+		register.setForeground(color);
+		username.setForeground(color);
+		password.setForeground(color);
+		repassword.setForeground(color);
 	}
 	
 	public void setBackgroundColor(Color color){
 		if(color == color.WHITE) shipImage.setIcon(client.BLACK_SHIP);
 		else shipImage.setIcon(client.WHITE_SHIP);
 		this.setBackground(color);
-		pregame.setBackground(color);
-		play.setBackground(color);
+		registerPanel.setBackground(color);
+		register.setBackground(color);
+		username.setBackground(color);
+		password.setBackground(color);
+		repassword.setBackground(color);
 	}
 	
 	public void actionPerformed(ActionEvent e){
-		if(e.getSource() == play){
-			client.startGame();
+		if(e.getSource() == register){
+			//TODO
+			client.startPregame();
 		}else if(e.getSource() == home){
 			client.displayHome();
 		}else if(e.getSource() == help){
@@ -94,8 +124,12 @@ public class Pregame extends JPanel implements ActionListener{
 			client.displaySettings();
 		}
 	}
-	
+
+
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
+
         jPanel1 = new javax.swing.JPanel();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
@@ -104,10 +138,9 @@ public class Pregame extends JPanel implements ActionListener{
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        jLabel4 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-		jPanel1.setRequestFocusEnabled(false);
 
         jButton2.setBackground(new java.awt.Color(255, 255, 255));
         jButton2.setFont(new java.awt.Font("Orbitron", 0, 15)); // NOI18N
@@ -151,12 +184,8 @@ public class Pregame extends JPanel implements ActionListener{
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 40, Short.MAX_VALUE)
+            .addGap(0, 120, Short.MAX_VALUE)
         );
-
-        jLabel4.setFont(new java.awt.Font("Orbitron", 0, 16)); // NOI18N
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel4.setText("Welcome back, username!");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -164,21 +193,25 @@ public class Pregame extends JPanel implements ActionListener{
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(27, 27, 27)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton3)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(27, 27, 27)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton3))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(371, 371, 371)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(371, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(372, Short.MAX_VALUE)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(370, 370, 370))
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(453, 453, 453))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -190,12 +223,13 @@ public class Pregame extends JPanel implements ActionListener{
                     .addComponent(jButton5))
                 .addGap(47, 47, 47)
                 .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel4)
-                .addGap(51, 51, 51)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 100, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
-    }                                                                           
+
+	}                  
 }
