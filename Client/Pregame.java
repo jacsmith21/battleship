@@ -3,6 +3,9 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class Pregame extends JPanel implements ActionListener{
+
+	private String name;
+
 	//NETBEANS
 	private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -27,8 +30,9 @@ public class Pregame extends JPanel implements ActionListener{
 	private JButton settings;
 	private JLabel returnMessage;
 	
-    public Pregame(Client client) {
+    public Pregame(Client client, String user) {
 		this.client = client;
+		this.name = user;
 		
 		//Init NETBEANS components
         initComponents();
@@ -156,7 +160,7 @@ public class Pregame extends JPanel implements ActionListener{
 
         jLabel4.setFont(new java.awt.Font("Orbitron", 0, 16)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel4.setText("Welcome back, username!");
+        jLabel4.setText("Welcome back, "+name+"!");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);

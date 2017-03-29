@@ -38,6 +38,7 @@ public class Game extends JPanel {
 	final ImageIcon WHITE_SHIPS = new ImageIcon(  getClass().getResource("/white_ships.png")  );
 	final ImageIcon WHITE_COMMANDER = new ImageIcon(  getClass().getResource("/white_commander.png")  );
 	final ImageIcon BLACK_COMMANDER = new ImageIcon(  getClass().getResource("/black_commander.png")  );
+	private final String ERROR = "err";
 
 	//Game states
 	private boolean settingShips;
@@ -63,6 +64,8 @@ public class Game extends JPanel {
 	private JLabel ships2;
 	private JLabel commanderImage;
 	private JLabel battleshipTitle;
+	private LineBorder border;
+	
 	
 	final boolean DEBUG = true;
 	
@@ -87,6 +90,8 @@ public class Game extends JPanel {
 		ships2 = jLabel9;
 		commanderImage = jLabel3;
 		battleshipTitle = jLabel14;
+		
+		border = new LineBorder(Color.BLACK, 1);
 	
 		//Setting initial game states
 		settingShips = true;
@@ -116,14 +121,6 @@ public class Game extends JPanel {
 	
 	public boolean isSettingShips(){
 		return settingShips;
-	}
-	
-	public void setColorBlind(){
-		//TODO set red green to yellow black
-	}
-	
-	public void setNotColorBlind(){
-	
 	}
 	
 	public void setBackgroundColor(Color color){
@@ -177,7 +174,7 @@ public class Game extends JPanel {
 	}
 	
 	/** Starts the gameplay for both player one and player 2
-		@param player the message from the server acknoledging the player number
+		//@param player the message from the server acknoledging the player number
 	*/
 	private void startGameplay(String message){
 		enemyBoard.setClickable();
@@ -266,7 +263,7 @@ public class Game extends JPanel {
 		attack = false;
 		defend = false;
 		if(message.contains("win")) {} //TODO display popup
-		client.startLeaderboards();
+		//TODO lanch leaderboards
 	}
 	
     public void jButton5ActionPerformed(java.awt.event.ActionEvent evt) { //HOME

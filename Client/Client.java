@@ -3,17 +3,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Scanner;
 import java.awt.event.*;
-import javax.swing.border.*;
-import java.applet.*;
-import javax.sound.sampled.*;
-import java.io.*;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 
 /** TODO
+	1. Add font / background colors to code so nothing is hard coded in and we can easily switch them in the settings (LAST)
+	5. Make commander messsage look better (LAST)
 	6. Add theme music (LAST)
 	7. Add hit / miss sounds (LAST)
-	8. Add error message
-	9. Fix error where the user sends ships before the other user is logged in
-	10. Add color blind images
 */
 
 public class Client extends JFrame{
@@ -22,11 +19,6 @@ public class Client extends JFrame{
 	final int WIDTH = 1027;
 	final ImageIcon BLACK_SHIP = new ImageIcon(  getClass().getResource("/black_ship.png")  );
 	final ImageIcon WHITE_SHIP = new ImageIcon(  getClass().getResource("/white_ship.png")  );
-	final File MUSIC_FILE = new File("music/ThemeMusic.wav");
-	final File USER_HIT_FILE = new File("music/ThemeMusic.wav");
-	final File USER_MISS_FILE = new File("music/ThemeMusic.wav");
-	final File ENEMY_HIT_FILE = new File("music/ThemeMusic.wav");
-	final File ENEMY_MISS_FILE = new File("music/ThemeMusic.wav");
 	
 	private Container cp;
 	private Color fontColor;
@@ -38,24 +30,11 @@ public class Client extends JFrame{
 	private Login login;
 	private Initial initial;
 	private LineBorder border;
-	private boolean loggedIn; //game state
-	private boolean isColorBlind;
-	private FloatControl musicControl;
-	private FloatControl FXControl;
-	private int musicLevel;
-	private int FXLevel;
 	
 	final boolean DEBUG = true;	
 		
 	public Client(){
 		super("Battleship");
-		
-		musicLevel = 50;
-		FXLevel = 50;
-		loggedIn = false;
-		isColorBlind = false;
-		initMusic();
-		setMusicLevel(musicLevel);
 		
 		fontColor = Color.BLACK;
 		backgroundColor = Color.WHITE;
@@ -65,58 +44,20 @@ public class Client extends JFrame{
 		this.setResizable(false);
 		cp = this.getContentPane(); //Getting content pane
 		
-		/*
 		Scanner sc = new Scanner(System.in);
 		int port = sc.nextInt();
 		server = new ClientConnection();
-		server.createConnection(port);
-		*/
+		server.createConnection(port);	
 		
 		//Game panel
 		register = new Register(this);
 		login = new Login(this);
-		pregame = new Pregame(this);
 		game = new Game(this); //Game panel
 		initial = new Initial(this);
 		cp.add(initial);
 		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.pack();
-	}
-	
-	public void initMusic(){
-		try{
-			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(MUSIC_FILE);
-			Clip themeMusic = AudioSystem.getClip();
-			themeMusic.open(audioInputStream);
-			musicControl = (FloatControl) themeMusic.getControl(FloatControl.Type.MASTER_GAIN);
-			themeMusic.loop(0);
-		}catch(UnsupportedAudioFileException e){
-			System.out.println(e.getMessage());
-		}catch(LineUnavailableException e){
-			System.out.println(e.getMessage());
-		}catch(IOException e){
-			System.out.println(e.getMessage());
-		}
-	}
-	
-	public void initFX(){
-		//TODO
-		/*
-		try{
-			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(MUSIC);
-			Clip themeMusic = AudioSystem.getClip();
-			themeMusic.open(audioInputStream);
-			musicControl = (FloatControl) themeMusic.getControl(FloatControl.Type.MASTER_GAIN);
-			themeMusic.loop(0);
-		}catch(UnsupportedAudioFileException e){
-			System.out.println(e.getMessage());
-		}catch(LineUnavailableException e){
-			System.out.println(e.getMessage());
-		}catch(IOException e){
-			System.out.println(e.getMessage());
-		}
-		*/
 	}
 	
 	public void startGame(){
@@ -127,9 +68,9 @@ public class Client extends JFrame{
 		cp.repaint();
 	}
 	
-	public void startPregame(){
+	public void startPregame(String user){
 		if(DEBUG) System.out.println("Going from registration to the pregame!");
-		loggedIn = true;
+		pregame = new Pregame(this, user);
 		cp.remove(login);
 		cp.remove(register);
 		cp.add(pregame);
@@ -138,7 +79,7 @@ public class Client extends JFrame{
 	}
 	
 	public void startLogin(){
-		if(DEBUG) System.out.println("Starting registration!");
+		if(DEBUG) System.out.println("Starting login!");
 		cp.remove(initial);
 		cp.add(login);
 		cp.revalidate();
@@ -154,36 +95,19 @@ public class Client extends JFrame{
 	}
 	
 	public void returnHome(){
-		cp.remove(initial);
-		cp.remove(register);
-		cp.remove(login);
-		cp.remove(pregame);
-		cp.remove(game);
-		if(loggedIn) cp.add(pregame);
-		else cp.add(initial);
-		cp.revalidate();
-		cp.repaint();
-	}
-	
-	public void startLeaderboards(){
-		cp.remove(game);
-		//TODO Lauch Leaderboards
-		cp.revalidate();
-		cp.repaint();
+		//TODO
 	}
 	
 	public void displayHome(){
 		if(DEBUG) System.out.println("Displaying home dialogue");
 		JDialog d1=new JDialog();
-		
 		d1.getRootPane().setBorder(border);
 		d1.setUndecorated(true);
 		d1.setSize(300,75);
-		
 		d1.setLocationRelativeTo(this);
 		d1.getContentPane().setBackground( Color.WHITE );
 		d1.setLayout(new FlowLayout());
-		
+
 		JLabel check = new JLabel("Are you sure you want to return home?");
 		check.setSize(50, 12);
 		d1.add(check);
@@ -196,9 +120,8 @@ public class Client extends JFrame{
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				returnHome(); //YES
-				if(DEBUG) System.out.println("ET PHONE HOME");
-				d1.dispose();
+				// display/center the jdialog when the button is pressed
+				System.out.println("ET PHONE HOME");
 			}
 		});
 		JButton no = new JButton("no");
@@ -209,7 +132,8 @@ public class Client extends JFrame{
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				d1.dispose(); //NO
+				// display/center the jdialog when the button is pressed
+				d1.dispose();
 			}
 		});
 
@@ -221,7 +145,7 @@ public class Client extends JFrame{
 		yesnoButtons.add(no);
 
 		d1.add(yesnoButtons);
-		
+
 		d1.setVisible(true);
 	}
 	
@@ -244,6 +168,8 @@ public class Client extends JFrame{
 
 		JPanel tester = new JPanel();
 		tester.setBackground(Color.WHITE);
+
+		//tester.setLayout(new BoxLayout(tester, BoxLayout.PAGE_AXIS));
 
 		JPanel title = new JPanel();
 		title.setLayout(new FlowLayout());
@@ -272,7 +198,8 @@ public class Client extends JFrame{
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				d1.dispose(); //RETURN
+				// display/center the jdialog when the button is pressed
+				d1.dispose();
 			}
 		});
 
@@ -331,7 +258,6 @@ public class Client extends JFrame{
 		JPanel musicSlider = new JPanel();
 		musicSlider.setBackground(Color.WHITE);
 		JSlider musicSliders = new JSlider();
-		musicSliders.setValue(musicLevel);
 		musicSliders.setAlignmentY(CENTER_ALIGNMENT);
 		musicSliders.setBackground(Color.WHITE);
 		musicSliders.setPreferredSize(new Dimension(130,20));
@@ -346,7 +272,6 @@ public class Client extends JFrame{
 		JPanel FXVolSlide = new JPanel();
 		FXVolSlide.setBackground(Color.WHITE);
 		JSlider FXVolSlider = new JSlider();
-		FXVolSlider.setValue(FXLevel);
 		FXVolSlider.setAlignmentY(CENTER_ALIGNMENT);
 		FXVolSlider.setPreferredSize(new Dimension(130,20));
 		FXVolSlider.setBackground(Color.WHITE);
@@ -364,13 +289,8 @@ public class Client extends JFrame{
 		BW.setBackground(Color.WHITE);
 		JRadioButton WB = new JRadioButton("B: White F: Black");
 		WB.setBackground(Color.WHITE);
-		ButtonGroup BWGroup = new ButtonGroup();
-    	BWGroup.add(BW);
-    	BWGroup.add(WB);
 		backAndFont.add(BW);
 		backAndFont.add(WB);
-		if(fontColor == Color.black) BW.setSelected(true);
-		else WB.setSelected(true);
 
 		JPanel colorBlindPane = new JPanel();
 		colorBlindPane.setBackground(Color.WHITE);
@@ -386,13 +306,8 @@ public class Client extends JFrame{
 		JRadioButton no = new JRadioButton("No");
 		no.setAlignmentY(CENTER_ALIGNMENT);
 		no.setBackground(Color.WHITE);
-		ButtonGroup yesNoGroup = new ButtonGroup();
-    	yesNoGroup.add(yes);
-    	yesNoGroup.add(no);
 		yesno.add(yes);
 		yesno.add(no);
-		if(isColorBlind) yes.setSelected(true);
-		else no.setSelected(true);
 
 		settings.add(musicVol);
 		settings.add(musicSlider);
@@ -414,12 +329,9 @@ public class Client extends JFrame{
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				if(DEBUG) System.out.println("User wants to restore default settings");
-				isColorBlind = false;
-				BW.setSelected(true);
-				no.setSelected(true);
-				musicSliders.setValue(50);
-				FXVolSlider.setValue(50);
+				// display/center the jdialog when the button is pressed
+				System.out.println("User wants to restore default settings");
+				d1.dispose();
 			}
 		});
 
@@ -432,14 +344,7 @@ public class Client extends JFrame{
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				if(yes.isSelected()) game.setColorBlind();
-				else game.setNotColorBlind();
-				if(BW.isSelected()) setColors(Color.BLACK, Color.WHITE);
-				else setColors(Color.WHITE, Color.BLACK);
-				setMusicLevel(musicSliders.getValue());
-				setFXLevel(musicSliders.getValue());
-				musicLevel = musicSliders.getValue();
-				FXLevel = FXVolSlider.getValue();
+				// display/center the jdialog when the button is pressed
 				d1.dispose();
 			}
 		});
@@ -453,21 +358,11 @@ public class Client extends JFrame{
 		d1.setVisible(true);
 	}
 	
-	public void setMusicLevel(int value){ //0 <= value <= 100
-		double gain = value/100.0;
-		float dB = (float) (Math.log(gain) / Math.log(10.0) * 20.0);
-		musicControl.setValue(dB);
-	}
-	
-	public void setFXLevel(int value){
-		double gain = value/100.0;
-		float dB = (float) (Math.log(gain) / Math.log(10.0) * 20.0);
-		FXControl.setValue(dB);
-	}
-	
-	public void setColors(Color font, Color background){
-		fontColor = font;
-		backgroundColor = background;
+	public void switchColors(){
+		if(fontColor == Color.WHITE) fontColor = Color.BLACK;
+		else fontColor = Color.WHITE;
+		if(backgroundColor == Color.BLACK) backgroundColor = Color.WHITE;
+		else backgroundColor = Color.BLACK;
 		pregame.setBackgroundColor(backgroundColor);
 		pregame.setFontColor(fontColor);
 		pregame.repaint();
