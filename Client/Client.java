@@ -3,14 +3,17 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Scanner;
 import java.awt.event.*;
-import javax.swing.border.Border;
-import javax.swing.border.LineBorder;
+import javax.swing.border.*;
+import java.applet.*;
+import javax.sound.sampled.*;
+import java.io.*;
 
 /** TODO
-	1. Add font / background colors to code so nothing is hard coded in and we can easily switch them in the settings (LAST)
-	5. Make commander messsage look better (LAST)
 	6. Add theme music (LAST)
 	7. Add hit / miss sounds (LAST)
+	8. Add error message
+	9. Fix error where the user sends ships before the other user is logged in
+	10. Add color blind images
 */
 
 public class Client extends JFrame{
@@ -19,6 +22,11 @@ public class Client extends JFrame{
 	final int WIDTH = 1027;
 	final ImageIcon BLACK_SHIP = new ImageIcon(  getClass().getResource("/black_ship.png")  );
 	final ImageIcon WHITE_SHIP = new ImageIcon(  getClass().getResource("/white_ship.png")  );
+	final File MUSIC_FILE = new File("music/ThemeMusic.wav");
+	final File USER_HIT_FILE = new File("music/ThemeMusic.wav");
+	final File USER_MISS_FILE = new File("music/ThemeMusic.wav");
+	final File ENEMY_HIT_FILE = new File("music/ThemeMusic.wav");
+	final File ENEMY_MISS_FILE = new File("music/ThemeMusic.wav");
 	
 	private Container cp;
 	private Color fontColor;
@@ -32,14 +40,22 @@ public class Client extends JFrame{
 	private LineBorder border;
 	private boolean loggedIn; //game state
 	private boolean isColorBlind;
+	private FloatControl musicControl;
+	private FloatControl FXControl;
+	private int musicLevel;
+	private int FXLevel;
 	
 	final boolean DEBUG = true;	
 		
 	public Client(){
 		super("Battleship");
 		
+		musicLevel = 50;
+		FXLevel = 50;
 		loggedIn = false;
 		isColorBlind = false;
+		initMusic();
+		setMusicLevel(musicLevel);
 		
 		fontColor = Color.BLACK;
 		backgroundColor = Color.WHITE;
@@ -66,6 +82,41 @@ public class Client extends JFrame{
 		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.pack();
+	}
+	
+	public void initMusic(){
+		try{
+			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(MUSIC_FILE);
+			Clip themeMusic = AudioSystem.getClip();
+			themeMusic.open(audioInputStream);
+			musicControl = (FloatControl) themeMusic.getControl(FloatControl.Type.MASTER_GAIN);
+			themeMusic.loop(0);
+		}catch(UnsupportedAudioFileException e){
+			System.out.println(e.getMessage());
+		}catch(LineUnavailableException e){
+			System.out.println(e.getMessage());
+		}catch(IOException e){
+			System.out.println(e.getMessage());
+		}
+	}
+	
+	public void initFX(){
+		//TODO
+		/*
+		try{
+			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(MUSIC);
+			Clip themeMusic = AudioSystem.getClip();
+			themeMusic.open(audioInputStream);
+			musicControl = (FloatControl) themeMusic.getControl(FloatControl.Type.MASTER_GAIN);
+			themeMusic.loop(0);
+		}catch(UnsupportedAudioFileException e){
+			System.out.println(e.getMessage());
+		}catch(LineUnavailableException e){
+			System.out.println(e.getMessage());
+		}catch(IOException e){
+			System.out.println(e.getMessage());
+		}
+		*/
 	}
 	
 	public void startGame(){
@@ -280,6 +331,7 @@ public class Client extends JFrame{
 		JPanel musicSlider = new JPanel();
 		musicSlider.setBackground(Color.WHITE);
 		JSlider musicSliders = new JSlider();
+		musicSliders.setValue(musicLevel);
 		musicSliders.setAlignmentY(CENTER_ALIGNMENT);
 		musicSliders.setBackground(Color.WHITE);
 		musicSliders.setPreferredSize(new Dimension(130,20));
@@ -294,6 +346,7 @@ public class Client extends JFrame{
 		JPanel FXVolSlide = new JPanel();
 		FXVolSlide.setBackground(Color.WHITE);
 		JSlider FXVolSlider = new JSlider();
+		FXVolSlider.setValue(FXLevel);
 		FXVolSlider.setAlignmentY(CENTER_ALIGNMENT);
 		FXVolSlider.setPreferredSize(new Dimension(130,20));
 		FXVolSlider.setBackground(Color.WHITE);
@@ -383,7 +436,10 @@ public class Client extends JFrame{
 				else game.setNotColorBlind();
 				if(BW.isSelected()) setColors(Color.BLACK, Color.WHITE);
 				else setColors(Color.WHITE, Color.BLACK);
-				//TODO music volume
+				setMusicLevel(musicSliders.getValue());
+				setFXLevel(musicSliders.getValue());
+				musicLevel = musicSliders.getValue();
+				FXLevel = FXVolSlider.getValue();
 				d1.dispose();
 			}
 		});
@@ -395,6 +451,18 @@ public class Client extends JFrame{
 		this.repaint();
 		
 		d1.setVisible(true);
+	}
+	
+	public void setMusicLevel(int value){ //0 <= value <= 100
+		double gain = value/100.0;
+		float dB = (float) (Math.log(gain) / Math.log(10.0) * 20.0);
+		musicControl.setValue(dB);
+	}
+	
+	public void setFXLevel(int value){
+		double gain = value/100.0;
+		float dB = (float) (Math.log(gain) / Math.log(10.0) * 20.0);
+		FXControl.setValue(dB);
 	}
 	
 	public void setColors(Color font, Color background){
