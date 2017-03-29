@@ -1,6 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 
 public class Game extends JPanel {
 	//NetBeans components
@@ -61,6 +63,7 @@ public class Game extends JPanel {
 	private JLabel ships2;
 	private JLabel commanderImage;
 	private JLabel battleshipTitle;
+	private LineBorder border;
 	
 	
 	final boolean DEBUG = true;
@@ -86,6 +89,8 @@ public class Game extends JPanel {
 		ships2 = jLabel9;
 		commanderImage = jLabel3;
 		battleshipTitle = jLabel14;
+		
+		border = new LineBorder(Color.BLACK, 1);
 	
 		//Setting initial game states
 		settingShips = true;

@@ -2,6 +2,9 @@
 import javax.swing.*;
 import java.awt.*;
 import java.util.Scanner;
+import java.awt.event.*;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 
 /** TODO
 	1. Add font / background colors to code so nothing is hard coded in and we can easily switch them in the settings (LAST)
@@ -26,6 +29,7 @@ public class Client extends JFrame{
 	private Register register;
 	private Login login;
 	private Initial initial;
+	private LineBorder border;
 	
 	final boolean DEBUG = true;	
 		
@@ -34,6 +38,7 @@ public class Client extends JFrame{
 		
 		fontColor = Color.BLACK;
 		backgroundColor = Color.WHITE;
+		border = new LineBorder(Color.BLACK, 1);
 		
 		this.setSize(WIDTH,HEIGHT);
 		this.setResizable(false);
@@ -69,6 +74,7 @@ public class Client extends JFrame{
 	public void startPregame(){
 		if(DEBUG) System.out.println("Going from registration to the pregame!");
 		cp.remove(login);
+		cp.remove(register);
 		cp.add(pregame);
 		cp.revalidate();
 		cp.repaint();
@@ -96,17 +102,262 @@ public class Client extends JFrame{
 	
 	public void displayHome(){
 		if(DEBUG) System.out.println("Displaying home dialogue");
-		//TODO
+		JDialog d1=new JDialog();
+		d1.getRootPane().setBorder(border);
+		d1.setUndecorated(true);
+		d1.setSize(300,75);
+		d1.setLocationRelativeTo(this);
+		d1.getContentPane().setBackground( Color.WHITE );
+		d1.setLayout(new FlowLayout());
+
+		JLabel check = new JLabel("Are you sure you want to return home?");
+		check.setSize(50, 12);
+		d1.add(check);
+
+		JButton yes = new JButton("yes");
+		yes.setSize(100,50);
+		yes.setBackground(Color.WHITE);
+		yes.setFocusPainted(false);
+		yes.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				// display/center the jdialog when the button is pressed
+				System.out.println("ET PHONE HOME");
+			}
+		});
+		JButton no = new JButton("no");
+		no.setSize(100, 50);
+		no.setBackground(Color.WHITE);
+		no.setFocusPainted(false);
+		no.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				// display/center the jdialog when the button is pressed
+				d1.dispose();
+			}
+		});
+
+		JPanel yesnoButtons = new JPanel();
+		yesnoButtons.setLayout(new GridLayout(1,2, 1, 1));
+		yesnoButtons.setBorder(border);
+		yesnoButtons.setBackground(Color.BLACK);
+		yesnoButtons.add(yes);
+		yesnoButtons.add(no);
+
+		d1.add(yesnoButtons);
+
+		d1.setVisible(true);
 	}
 	
 	public void displayHelp(){
 		if(DEBUG) System.out.println("Displaying help dialogue");
-		//TODO
+        System.out.println("help");
+		//TO DO
+		JDialog d1=new JDialog();
+		d1.getContentPane().setBackground( Color.WHITE );
+		d1.setUndecorated(true);
+		d1.setSize(310,350);
+		d1.setLocationRelativeTo(this);
+
+		JPanel returnButton = new JPanel();
+		returnButton.setBackground(Color.WHITE);
+
+		// Set some layout
+		d1.setLayout(new FlowLayout());
+		d1.getRootPane().setBorder(border);
+
+		JPanel tester = new JPanel();
+		tester.setBackground(Color.WHITE);
+
+		//tester.setLayout(new BoxLayout(tester, BoxLayout.PAGE_AXIS));
+
+		JPanel title = new JPanel();
+		title.setLayout(new FlowLayout());
+		title.setBackground(Color.WHITE);
+
+		JLabel howTo = new JLabel("How to Play  ");
+		JLabel battleShip = new JLabel("BattleShip");
+		title.add(howTo);
+		title.add(battleShip);
+
+		battleShip.setFont(new java.awt.Font("Orbitron", 0, 25));
+		JLabel heading = new JLabel("1. Setting Your Ships");
+		heading.setFont(new java.awt.Font("Orbitron", 0, 15));
+		JLabel info = new JLabel(convertToMultiline("Your ships are already set up on your board \ninitially. Drag and drop to move them around. \nIf you want to rotate, just click on a ship and \nthen click on the rotate button on the top right \ncorner. When you're done, hit submit."));
+		JLabel heading2 = new JLabel("2. Playing the Game");
+		heading2.setFont(new java.awt.Font("Orbitron", 0, 15));
+		JLabel info2 = new JLabel(convertToMultiline("The goal is to sink all of the enemy's ships \nbefore they sink all of yours. Each ship needs \nto be hit at all of its locations before it is sunk. \nEach turn, both you and your enemy will be \ngiven a chance to attack each other's ships. \nWhen it is your turn, simply choose a location \non the enemy's board to attack."));
+
+		JButton returnToGame = new JButton("Return");
+		returnToGame.setPreferredSize(new Dimension(75, 40));
+		returnToGame.setFont(new java.awt.Font("Orbitron", 0, 12));
+		returnToGame.setBackground(Color.WHITE);
+		returnToGame.setBorder(border);
+		returnToGame.setFocusPainted(false);
+		returnToGame.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				// display/center the jdialog when the button is pressed
+				d1.dispose();
+			}
+		});
+
+		d1.add(title);
+		d1.add(heading);
+		d1.add(info);
+		d1.add(heading2);
+		d1.add(info2);
+		returnButton.add(returnToGame);
+		d1.add(returnButton);
+
+		//d1.add(tester);
+
+		d1.setVisible(true);
+	}
+	
+	public static String convertToMultiline(String orig)
+	{
+		return "<html>" + orig.replaceAll("\n", "<br>");
 	}
 	
 	public void displaySettings(){
 		if(DEBUG) System.out.println("Displaying settings dialogue");
-		switchColors();
+		JDialog d1=new JDialog();
+
+		d1.setUndecorated(true);
+		d1.setSize(320,375);
+		d1.setLocationRelativeTo(this);
+		d1.setLayout(new FlowLayout());
+		d1.getContentPane().setBackground( Color.WHITE );
+		d1.getRootPane().setBorder(border);
+
+		JPanel tester = new JPanel();
+		tester.setPreferredSize(new Dimension(300, 300));
+		tester.setBackground(Color.WHITE);
+
+		// Set some layout
+		tester.setLayout(new BoxLayout(tester, BoxLayout.PAGE_AXIS));
+
+		JLabel test = new JLabel("Settings");
+		test.setAlignmentX(CENTER_ALIGNMENT);
+		test.setFont(new java.awt.Font("Orbitron", 0, 24));
+		tester.add(test);
+
+		JPanel settings = new JPanel();
+		settings.setLayout(new GridLayout(4,2, 1, 1));
+		settings.setBackground(Color.BLACK);
+		settings.setBorder(border);
+
+		JPanel musicVol = new JPanel();
+		musicVol.setBackground(Color.WHITE);
+		JLabel musicVolLabel = new JLabel("Music Volume");
+		musicVolLabel.setAlignmentY(CENTER_ALIGNMENT);
+		musicVol.add(musicVolLabel);
+
+		JPanel musicSlider = new JPanel();
+		musicSlider.setBackground(Color.WHITE);
+		JSlider musicSliders = new JSlider();
+		musicSliders.setAlignmentY(CENTER_ALIGNMENT);
+		musicSliders.setBackground(Color.WHITE);
+		musicSliders.setPreferredSize(new Dimension(130,20));
+		musicSlider.add(musicSliders);
+
+		JPanel FXVol = new JPanel();
+		FXVol.setBackground(Color.WHITE);
+		JLabel FXVolLabel = new JLabel("FX Volume");
+		FXVolLabel.setAlignmentY(CENTER_ALIGNMENT);
+		FXVol.add(FXVolLabel);
+
+		JPanel FXVolSlide = new JPanel();
+		FXVolSlide.setBackground(Color.WHITE);
+		JSlider FXVolSlider = new JSlider();
+		FXVolSlider.setAlignmentY(CENTER_ALIGNMENT);
+		FXVolSlider.setPreferredSize(new Dimension(130,20));
+		FXVolSlider.setBackground(Color.WHITE);
+		FXVolSlide.add(FXVolSlider);
+
+		JPanel backAndFontPanel = new JPanel();
+		backAndFontPanel.setBackground(Color.WHITE);
+		JLabel BFColor = new JLabel(convertToMultiline("Background & \nFont Colour"));
+		BFColor.setAlignmentY(CENTER_ALIGNMENT);
+		backAndFontPanel.add(BFColor);
+
+		JPanel backAndFont = new JPanel();
+		backAndFont.setBackground(Color.WHITE);
+		JRadioButton BW = new JRadioButton("B: Black F: White");
+		BW.setBackground(Color.WHITE);
+		JRadioButton WB = new JRadioButton("B: White F: Black");
+		WB.setBackground(Color.WHITE);
+		backAndFont.add(BW);
+		backAndFont.add(WB);
+
+		JPanel colorBlindPane = new JPanel();
+		colorBlindPane.setBackground(Color.WHITE);
+		JLabel colorBlind = new JLabel("Colour Blind");
+		colorBlind.setAlignmentY(CENTER_ALIGNMENT);
+		colorBlindPane.add(colorBlind);
+
+		JPanel yesno = new JPanel();
+		yesno.setBackground(Color.WHITE);
+		JRadioButton yes = new JRadioButton("Yes");
+		yes.setBackground(Color.WHITE);
+		yes.setAlignmentY(CENTER_ALIGNMENT);
+		JRadioButton no = new JRadioButton("No");
+		no.setAlignmentY(CENTER_ALIGNMENT);
+		no.setBackground(Color.WHITE);
+		yesno.add(yes);
+		yesno.add(no);
+
+		settings.add(musicVol);
+		settings.add(musicSlider);
+		settings.add(FXVol);
+		settings.add(FXVolSlide);
+		settings.add(backAndFontPanel);
+		settings.add(backAndFont);
+		settings.add(colorBlindPane);
+		settings.add(yesno);
+
+		tester.add(settings);
+
+		JButton restoreDefaults = new JButton("restore defaults");
+		restoreDefaults.setPreferredSize(new Dimension(150, 30));
+		restoreDefaults.setBackground(Color.WHITE);
+		restoreDefaults.setFocusPainted(false);
+		restoreDefaults.setFont(new java.awt.Font("Orbitron", 0, 12));
+		restoreDefaults.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				// display/center the jdialog when the button is pressed
+				System.out.println("User wants to restore default settings");
+				d1.dispose();
+			}
+		});
+
+		JButton ok = new JButton("Apply Changes");
+		ok.setPreferredSize(new Dimension(150, 30));
+		ok.setBackground(Color.WHITE);
+		ok.setFocusPainted(false);
+		ok.setFont(new java.awt.Font("Orbitron", 0, 12));
+		ok.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				// display/center the jdialog when the button is pressed
+				d1.dispose();
+			}
+		});
+
+		d1.add(tester);
+		d1.add(restoreDefaults);
+		d1.add(ok);
+		this.revalidate();
+		this.repaint();
+		
+		d1.setVisible(true);
 	}
 	
 	public void switchColors(){
