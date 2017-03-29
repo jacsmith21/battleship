@@ -63,8 +63,6 @@ public class Game extends JPanel {
 	private JLabel ships2;
 	private JLabel commanderImage;
 	private JLabel battleshipTitle;
-	private LineBorder border;
-	
 	
 	final boolean DEBUG = true;
 	
@@ -89,8 +87,6 @@ public class Game extends JPanel {
 		ships2 = jLabel9;
 		commanderImage = jLabel3;
 		battleshipTitle = jLabel14;
-		
-		border = new LineBorder(Color.BLACK, 1);
 	
 		//Setting initial game states
 		settingShips = true;
@@ -120,6 +116,14 @@ public class Game extends JPanel {
 	
 	public boolean isSettingShips(){
 		return settingShips;
+	}
+	
+	public void setColorBlind(){
+		//TODO set red green to yellow black
+	}
+	
+	public void setNotColorBlind(){
+	
 	}
 	
 	public void setBackgroundColor(Color color){
@@ -262,7 +266,7 @@ public class Game extends JPanel {
 		attack = false;
 		defend = false;
 		if(message.contains("win")) {} //TODO display popup
-		//TODO lanch leaderboards
+		client.startLeaderboards();
 	}
 	
     public void jButton5ActionPerformed(java.awt.event.ActionEvent evt) { //HOME
