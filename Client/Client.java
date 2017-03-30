@@ -73,11 +73,13 @@ public class Client extends JFrame{
 		initial = new Initial(this);
 		cp.add(initial);
 		
+		//Game states
+		loggedIn = false;
+		isColorBlind = false;
+		
 		//Setting sound stuff
 		musicLevel = 50;
 		FXLevel = 50;
-		loggedIn = false;
-		isColorBlind = false;
 		initMusic();
 		game.initFX();
 		setMusicLevel(musicLevel);
@@ -93,7 +95,7 @@ public class Client extends JFrame{
 			Clip themeMusic = AudioSystem.getClip();
 			themeMusic.open(audioInputStream);
 			musicControl = (FloatControl) themeMusic.getControl(FloatControl.Type.MASTER_GAIN);
-			themeMusic.loop(0);
+			themeMusic.loop(Clip.LOOP_CONTINUOUSLY);
 		}catch(UnsupportedAudioFileException e){
 			System.out.println(e.getMessage());
 		}catch(LineUnavailableException e){
@@ -418,12 +420,18 @@ public class Client extends JFrame{
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				if(yes.isSelected()) game.setColorBlind();
-				else game.setNotColorBlind();
+				if(yes.isSelected()){
+					game.setColorBlind();
+					isColorBlind = true;
+				}else{
+					game.setNotColorBlind();
+					isColorBlind = false;
+				}
 				if(BW.isSelected()) setColors(Color.BLACK, Color.WHITE);
 				else setColors(Color.WHITE, Color.BLACK);
+
 				setMusicLevel(musicSliders.getValue());
-				game.setFXLevel(musicSliders.getValue());
+				game.setFXLevel(FXVolSlider.getValue());
 				musicLevel = musicSliders.getValue();
 				FXLevel = FXVolSlider.getValue();
 				d1.dispose();
@@ -444,8 +452,6 @@ public class Client extends JFrame{
 		float dB = (float) (Math.log(gain) / Math.log(10.0) * 20.0);
 		musicControl.setValue(dB);
 	}
-	
-	
 	
 	public void setColors(Color font, Color background){
 		fontColor = font;

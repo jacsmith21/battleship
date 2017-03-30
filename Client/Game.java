@@ -156,22 +156,22 @@ public class Game extends JPanel {
 		try{
 			//UserHit
 			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(userHitFile);
-			Clip userHitClip = AudioSystem.getClip();
+			userHitClip = AudioSystem.getClip();
 			userHitClip.open(audioInputStream);
 			userHitControl = (FloatControl) userHitClip.getControl(FloatControl.Type.MASTER_GAIN);
 			//UserMiss
 			audioInputStream = AudioSystem.getAudioInputStream(userMissFile);
-			Clip userMissClip = AudioSystem.getClip();
+			userMissClip = AudioSystem.getClip();
 			userMissClip.open(audioInputStream);
 			userMissControl = (FloatControl) userMissClip.getControl(FloatControl.Type.MASTER_GAIN);
 			//EnemyHit
 			audioInputStream = AudioSystem.getAudioInputStream(enemyHitFile);
-			Clip enemyHitClip = AudioSystem.getClip();
+			enemyHitClip = AudioSystem.getClip();
 			enemyHitClip.open(audioInputStream);
 			enemyHitControl = (FloatControl) enemyHitClip.getControl(FloatControl.Type.MASTER_GAIN);
 			//EnemyMiss
 			audioInputStream = AudioSystem.getAudioInputStream(enemyMissFile);
-			Clip enemyMissClip = AudioSystem.getClip();
+			enemyMissClip = AudioSystem.getClip();
 			enemyMissClip.open(audioInputStream);
 			enemyMissControl = (FloatControl) enemyMissClip.getControl(FloatControl.Type.MASTER_GAIN);
 		}catch(UnsupportedAudioFileException e){
@@ -343,11 +343,21 @@ public class Game extends JPanel {
 	
 	private void playFX(String message){
 		if(attack){
-			if(message.contains("hit")) enemyHitClip.start();
-			else enemyMissClip.start();
+			if(message.contains("hit")){
+				enemyHitClip.setFramePosition(0);
+				enemyHitClip.start();
+			}else{
+				enemyMissClip.setFramePosition(0);
+				enemyMissClip.start();
+			}
 		}else{
-			if(message.contains("hit")) userHitClip.start();
-			else userMissClip.start();
+			if(message.contains("hit")){
+				userHitClip.setFramePosition(0);
+				userHitClip.start();
+			}else{
+				userMissClip.setFramePosition(0);	
+				userMissClip.start();
+			}
 		}
 	}
 	
