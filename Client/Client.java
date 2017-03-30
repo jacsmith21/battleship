@@ -9,7 +9,7 @@ import javax.sound.sampled.*;
 import java.io.*;
 
 /** TODO
-	7. Add hit / miss sounds (LAST)
+	7. Add image folder
 */
 
 public class Client extends JFrame{
@@ -30,6 +30,7 @@ public class Client extends JFrame{
 	private Register register;
 	private Login login;
 	private Initial initial;
+	private Leaderboards leaderboards;
 	private LineBorder border;
 	private boolean loggedIn; //game state
 	private boolean isColorBlind;
@@ -71,6 +72,7 @@ public class Client extends JFrame{
 		pregame = new Pregame(this);
 		game = new Game(this); //Game panel
 		initial = new Initial(this);
+		leaderboards = new Leaderboards(this);
 		cp.add(initial);
 		
 		//Game states
@@ -118,6 +120,7 @@ public class Client extends JFrame{
 		loggedIn = true;
 		pregame.setName(name);
 		game.setName(name);
+		leaderboards.setName(name);
 		cp.remove(login);
 		cp.remove(register);
 		cp.add(pregame);
@@ -155,7 +158,8 @@ public class Client extends JFrame{
 	
 	public void startLeaderboards(){
 		cp.remove(game);
-		//TODO Lauch Leaderboards
+		leaderboards.initLeaderboards();
+		cp.add(leaderboards);
 		cp.revalidate();
 		cp.repaint();
 	}
