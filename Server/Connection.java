@@ -28,10 +28,12 @@ public class Connection{
         }catch(IOException e){
             System.err.println("Unable to read from " + e.getMessage());
         }
+        System.out.println("RECEIVING: " + text);
         return text;
     }
 
     public void send(String output){
+    	System.out.println("SENDING: " + output);
         out.println(output); //Doesn't ever throw IO exception
     }
 

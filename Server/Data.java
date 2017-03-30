@@ -25,6 +25,7 @@ public class Data {
 
     public static boolean validateData(ArrayList<String[]> input){
         boolean result = true;
+        ArrayList<String> test = new ArrayList();
 
         if(input.size() != 4){
             result = false;
@@ -33,6 +34,7 @@ public class Data {
         for(int i = 0; i < input.size(); i++){
             String previous = "null";
             for(int j = 1; j < input.get(i).length; j++){
+                test.add(input.get(i)[j]);
                 if(!isValidCoordinate(input.get(i)[j])){
                     result = false;
                     break;
@@ -49,6 +51,16 @@ public class Data {
                 previous = input.get(i)[j];
             }
         }
+
+        for(int i = 0; i < test.size(); i++){
+            for(int j = i+1; j < test.size(); j++){
+                if(test.get(i).equals(test.get(j))){
+                    result = false;
+                    break;
+                }
+            }
+        }
+
         return result;
     }
 

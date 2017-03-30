@@ -28,10 +28,5 @@ public class Coordinate {
     public boolean isHit(){
         return state;
     }
-	
-	public String toString(){
-		if(state) return coordinate + "(h)";
-		else return coordinate + "(nh)";
-	}
 
 }

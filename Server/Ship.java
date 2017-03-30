@@ -62,13 +62,5 @@ public class Ship {
     private void updateState(){
         state = false;
     }
-	
-	public String toString(){
-		String string = name + ": ";
-		for(Coordinate coordinate : coordinates) string += coordinate.toString() + " ";
-		if(state) string += "(s)";
-		else string += "(f)";
-		return string;
-	}
 
 }
