@@ -35,6 +35,7 @@ public class Game extends JPanel {
 	
 	//general constants
 	final int WIDTH = 420; //Enemy / user board width
+	final String ERROR = "err";
 	final ImageIcon GREEN_ICON = new ImageIcon(  getClass().getResource("/green_circle.png")  );
 	final ImageIcon RED_ICON = new ImageIcon(  getClass().getResource("/red_circle.png")  );
 	final ImageIcon BLACK_SHIPS = new ImageIcon(  getClass().getResource("/black_ships.png")  );
