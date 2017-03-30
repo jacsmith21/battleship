@@ -10,7 +10,6 @@ import java.io.*;
 
 /** TODO
 	7. Add hit / miss sounds (LAST)
-	10. Add color blind images
 */
 
 public class Client extends JFrame{
@@ -116,6 +115,7 @@ public class Client extends JFrame{
 		if(DEBUG) System.out.println("Going from registration to the pregame!");
 		loggedIn = true;
 		pregame.setName(name);
+		game.setName(name);
 		cp.remove(login);
 		cp.remove(register);
 		cp.add(pregame);
