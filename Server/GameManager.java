@@ -44,12 +44,12 @@ public class GameManager {
 
         player2Message = player2.recieve();
         String[] info2 = player2Message.split(",");
-        if(info[0].equals("N")){
+        if(info2[0].equals("N")){
         	if(DEBUG) System.out.println("Signing up player two!");
-            signup(info[1], player2);
-        } else if(info[0].equals("R")){
+            signup(info2[1], player2);
+        } else if(info2[0].equals("R")){
         	if(DEBUG) System.out.println("Logging in player two!");
-            login(info[1], player2);
+            login(info2[1], player2);
         }
     }
 
