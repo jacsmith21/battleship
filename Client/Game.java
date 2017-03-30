@@ -136,6 +136,10 @@ public class Game extends JPanel {
 		return settingShips;
 	}
 	
+	public boolean isAttack(){
+		return attack;
+	}
+	
 	public void initFX(){
 		/*
 		try{
@@ -257,7 +261,6 @@ public class Game extends JPanel {
 	*/
 	public void sendMessage(String message){
 		client.send(message);
-		if(DEBUG) System.out.println("SENDING: " + message);
 	}
 	
 	/**Recieves a message, either from the server or from the command line
@@ -265,7 +268,6 @@ public class Game extends JPanel {
 	*/
 	private void getMessage(){
 		String message = client.receive();
-		if(DEBUG) System.out.println("RECEIVING: " + message);
 		if(message.equals("ok")){
 			this.startOffense();
 		}else if(attack){

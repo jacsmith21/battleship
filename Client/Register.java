@@ -116,7 +116,6 @@ public class Register extends JPanel implements ActionListener{
 		if(e.getSource() == register){
 			String toSend = "N," + username.getText();
 			client.send(toSend);
-			System.out.println("Send "+toSend);
 			String response = client.receive();
 			if(response.equals("ack")){
 				client.send(password.getText());

@@ -59,12 +59,12 @@ public class Client extends JFrame{
 		this.setResizable(false);
 		cp = this.getContentPane(); //Getting content pane
 		
-		/*
+		
 		Scanner sc = new Scanner(System.in);
 		int port = sc.nextInt();
 		server = new ClientConnection();
 		server.createConnection(port);
-		*/
+		
 		
 		//Game panel
 		register = new Register(this);
@@ -124,7 +124,7 @@ public class Client extends JFrame{
 	}
 	
 	public void startLogin(){
-		if(DEBUG) System.out.println("Starting registration!");
+		if(DEBUG) System.out.println("Starting login!");
 		cp.remove(initial);
 		cp.add(login);
 		cp.revalidate();
@@ -472,9 +472,16 @@ public class Client extends JFrame{
 	
 	public Color getBackgroundColor(){ return backgroundColor; }
 	
-	public void send(String message){ server.send(message); }
+	public void send(String message){ 
+		if(DEBUG) System.out.println("SENDING: " + message);
+		server.send(message); 
+	}
 	
-	public String receive() { return server.receive(); }
+	public String receive() { 
+		String message = server.receive(); 
+		if(DEBUG) System.out.println("RECEIVING: " + message);
+		return  message;
+	}
 	
 	public static void main(String[] args){
 		new Client() .setVisible(true);
