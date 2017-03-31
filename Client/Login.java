@@ -114,7 +114,10 @@ public class Login extends JPanel implements ActionListener{
 				System.out.println(toSend);
 				client.send(toSend);
 				response = client.receive();
-				if(response.equals("ack")) validUsername = true;
+				if(response.equals("ack")){
+					validUsername = true;
+					username.setEnabled(false);
+				}
 			}
 			if(validUsername){
 				client.send(password.getText());

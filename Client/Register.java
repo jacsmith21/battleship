@@ -121,7 +121,10 @@ public class Register extends JPanel implements ActionListener{
 				String toSend = "N," + username.getText();
 				client.send(toSend);
 				response = client.receive();
-				if(response.equals("ack")) validUsername = true;
+				if(response.equals("ack")){
+					validUsername = true;
+					username.setEnabled(false);
+				}
 				else username.setText(response);
 			}
 			if(validUsername){

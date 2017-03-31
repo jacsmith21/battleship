@@ -19,7 +19,7 @@ public class GridPanel extends JPanel implements MouseListener, MouseMotionListe
 	
 	//Initial ship info
 	final int[] X_POSITIONS = {0, 1, 2, 3};
-	final int[] Y_POSITIONS = {0, 1, 0, 1};
+	final int[] Y_POSITIONS = {0, 0, 0, 0};
 	final int[] LENGTHS = {5,4,3,2};
 	final char[] ORIENTATIONS = {VERTICLE,VERTICLE,VERTICLE,HORIZONTAL}; //v = VERTICLE, h = HORIZONTAL
 	final String[] NAMES = {"AC","CR","SB","FR"};
@@ -128,19 +128,9 @@ public class GridPanel extends JPanel implements MouseListener, MouseMotionListe
 	}
 	
 	public void refreshShips(){
-	}
-	
-	public void refreshButtonColors(){
-		System.out.println("Refreshing buttons!");
-		GridButton b;
-		for(int i = 0; i < buttons.length; i++){
-			for(int j = 0; j < buttons[0].length; j++){
-				b = buttons[i][j];
-				if(b.isHit()){
-					if(DEBUG) System.out.println("Setting red button: " + button.getCoordinate());
-					b.setBackground(HIT);
-				}
-			}
+		for(ShipLabel ship : ships){
+			this.remove(ship);
+			this.addShip(ship);
 		}
 	}
 	
@@ -152,14 +142,13 @@ public class GridPanel extends JPanel implements MouseListener, MouseMotionListe
 		if(message.contains("sunk")){
 			String ship = (message.split(" "))[1];
 			button.setBackground(HIT);
-			button.setEnabled(false);
 			game.updateEnemyStatusIcons(ship);
 		}else if(message.contains("hit")){
 			button.setBackground(HIT);
-			button.setEnabled(false);
 		}else{
 			button.setBackground(MISS);
 		}
+		button.setEnabled(false);
 	}
 	
 	public void updateUserBoard(String message){
@@ -170,12 +159,31 @@ public class GridPanel extends JPanel implements MouseListener, MouseMotionListe
 			button.setBackground(HIT);
 			game.updateUserStatusIcons(ship);
 			button.setHit(true);
+			addHitGridButton(coordinate[0],coordinate[1]);
 		}else if(message.contains("hit")){
 			button.setBackground(HIT);
 			button.setHit(true);
+			addHitGridButton(coordinate[0],coordinate[1]);
 		}else{
 			button.setBackground(MISS);
 		}
+	}
+	
+	public void addHitGridButton(int i, int j){
+		GridButton button = new GridButton(i,j);
+		button.setOpaque(true);
+		button.setBorderPainted(true);
+		button.setPreferredSize(new Dimension(SIDE,SIDE));
+		button.setEnabled(false);
+		GridBagConstraints c = new GridBagConstraints();
+		c.gridx = i;
+		c.gridy = j;
+		c.weightx = 1; //To avoid clumping
+		c.weighty  = 1; //To avoid clumping
+		button.setBackground(HIT);
+		this.add(button,c);
+		refreshShips();
+		refreshButtons();
 	}
 	
 	private int[] getRowCol(String coordinate){

@@ -154,11 +154,6 @@ public class Game extends JPanel {
 		jLabel16.setText(name);
 	}
 	
-	public void refreshButtonColors(){
-		if(DEBUG) System.out.println("HEY");
-		userBoard.refreshButtonColors();
-	}
-	
 	public void initFX(){
 		try{
 			userHitFile = new File("music/UserHit.wav");
@@ -356,6 +351,7 @@ public class Game extends JPanel {
 				this.startGameplay(message);
 			}else{
 				submit.setEnabled(true);
+				rotate.setEnabled(true);
 				commander.setText("<html>Error!<br>Try again!</html>");
 				if(DEBUG) System.out.println("Error with ship locations");
 			}
@@ -409,7 +405,7 @@ public class Game extends JPanel {
 		attack = false;
 		defend = false;
 		if(message.contains("win")) {} //TODO display popup
-		client.startLeaderboards();
+		client.startLeaderboards(message);
 	}
 	
     public void jButton5ActionPerformed(java.awt.event.ActionEvent evt) { //HOME
@@ -429,6 +425,7 @@ public class Game extends JPanel {
 	*/
     public void jButton4ActionPerformed(java.awt.event.ActionEvent evt) { //SUBMIT
 		submit.setEnabled(false);
+		rotate.setEnabled(false);
 		userBoard.sendShipLocations();
 
 	}

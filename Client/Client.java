@@ -1,4 +1,3 @@
-/** Main java file, will control game flow */
 import javax.swing.*;
 import java.awt.*;
 import java.util.Scanner;
@@ -24,7 +23,6 @@ public class Client extends JFrame{
 	private Initial initial;
 	private Leaderboards leaderboards;
 	private LineBorder border;
-	private boolean loggedIn; //game state
 	private boolean isColorBlind;
 	private boolean inLeaderboards;
 	private FloatControl musicControl;
@@ -34,7 +32,7 @@ public class Client extends JFrame{
 	ImageIcon blackShip;
  	ImageIcon whiteShip;
 	
-	final boolean DEBUG = true;	
+	final boolean DEBUG = false;	
 		
 	public Client(){
 		super("Battleship");
@@ -83,9 +81,6 @@ public class Client extends JFrame{
 		leaderboards = new Leaderboards(this);
 		cp.add(initial);
 		
-		
-		//Game states
-		loggedIn = false;
 		isColorBlind = false;
 		inLeaderboards = false;
 		
@@ -100,6 +95,7 @@ public class Client extends JFrame{
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.pack();
 	}
+	
 	
 	public void initMusic(){
 		try{
@@ -127,7 +123,6 @@ public class Client extends JFrame{
 	
 	public void startPregame(String name){
 		if(DEBUG) System.out.println("Going from registration to the pregame!");
-		loggedIn = true;
 		pregame.setName(name);
 		game.setName(name);
 		leaderboards.setName(name);
@@ -162,24 +157,31 @@ public class Client extends JFrame{
 		cp.remove(game);
 		cp.remove(leaderboards);
 		if(inLeaderboards){
+			//Restarting the game!
 			inLeaderboards = false;
 			game = new Game(this);
 			register = new Register(this);
 			login = new Login(this);
 			leaderboards = new Leaderboards(this);
+			inLeaderboards = false;
+			game.initFX();
+			game.setFXLevel(FXLevel);
+			if(fontColor == Color.BLACK) setColors(Color.BLACK, Color.WHITE);
+			else setColors(Color.WHITE, Color.BLACK);
 		}
 		cp.add(initial);
 		cp.revalidate();
 		cp.repaint();
 	}
 	
-	public void startLeaderboards(){
+	public void startLeaderboards(String message){
 		cp.remove(game);
 		leaderboards.initLeaderboards();
 		cp.add(leaderboards);
 		inLeaderboards = true;
 		cp.revalidate();
 		cp.repaint();
+		new EndGameDialog(this, message) .setVisible(true);
 	}
 	
 	public void displayHome(){
@@ -243,7 +245,6 @@ public class Client extends JFrame{
 	
 	public void displayHelp(){
 		if(DEBUG) System.out.println("Displaying help dialogue");
-        System.out.println("help");
 		//TO DO
 		JDialog d1=new JDialog();
 		d1.getContentPane().setBackground( Color.WHITE );
@@ -458,8 +459,6 @@ public class Client extends JFrame{
 				}
 				if(BW.isSelected()) setColors(Color.BLACK, Color.WHITE);
 				else setColors(Color.WHITE, Color.BLACK);
-				game.refreshButtonColors();
-				if(DEBUG) System.out.println("HEY");
 				setMusicLevel(musicSliders.getValue());
 				game.setFXLevel(FXVolSlider.getValue());
 				musicLevel = musicSliders.getValue();
