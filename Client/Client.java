@@ -160,8 +160,9 @@ public class Client extends JFrame{
 		cp.remove(login);
 		cp.remove(pregame);
 		cp.remove(game);
+		cp.remove(leaderboards);
 		inLeaderboards = false;
-		if(loggedIn) cp.add(pregame);
+		if(loggedIn && !inLeaderboards) cp.add(pregame);
 		else cp.add(initial);
 		cp.revalidate();
 		cp.repaint();
