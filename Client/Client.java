@@ -8,10 +8,6 @@ import java.applet.*;
 import javax.sound.sampled.*;
 import java.io.*;
 
-/** TODO
-	7. Add image folder
-*/
-
 public class Client extends JFrame{
 	//general constants	
 	final int HEIGHT = 611;
@@ -60,9 +56,14 @@ public class Client extends JFrame{
 		cp = this.getContentPane(); //Getting content pane
 		
 		Scanner sc = new Scanner(System.in);
+		System.out.print("Enter port: ");
 		int port = sc.nextInt();
+		sc.nextLine();
+		System.out.print("Enter ip adress: ");
+		String ip = sc.nextLine();
+		
 		server = new ClientConnection();
-		server.createConnection(port);
+		server.createConnection(ip, port);
 		
 		
 		//Game panel

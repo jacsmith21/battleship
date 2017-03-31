@@ -5,9 +5,8 @@ public class ClientConnection extends Connection{
     
 	public ClientConnection(){}
     
-    public void createConnection(int port){
+    public void createConnection(String host, int port){
         Socket socket = null;
-		String host = "localhost";
 		while(true){
 			try{
 				socket = new Socket(host, port);

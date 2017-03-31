@@ -335,6 +335,7 @@ public class Game extends JPanel {
 				gamePanel.repaint();
 				this.startGameplay(message);
 			}else{
+				submit.setEnabled(true);
 				commander.setText("<html>Error!<br>Try again!</html>");
 				if(DEBUG) System.out.println("Error with ship locations");
 			}
@@ -403,8 +404,9 @@ public class Game extends JPanel {
 		@param evt the action event
 	*/
     public void jButton4ActionPerformed(java.awt.event.ActionEvent evt) { //SUBMIT
+		submit.setEnabled(false);
 		userBoard.sendShipLocations();
-		
+
 	}
 
     public void jButton6ActionPerformed(java.awt.event.ActionEvent evt){ //ROTATING

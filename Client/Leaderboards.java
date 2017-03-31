@@ -63,7 +63,7 @@ public class Leaderboards extends JPanel implements ActionListener{
 	}
 	
 	public void initTopThree(String message){
-		labels = new JLabel[5][4]; //5 columns, 4 rows
+		labels = new JLabel[5][5]; //5 columns, 5 rows
 		topThreePanel.setLayout(new GridBagLayout());
 		GridBagConstraints c;
 		JLabel label;
@@ -90,21 +90,24 @@ public class Leaderboards extends JPanel implements ActionListener{
 		
 		GridBagConstraints c = new GridBagConstraints(); 
 		
+		//Adding username
 		JLabel label = formatLabel(username);
 		formatConstraints(c,1,0);
 		userScorePanel.add(label,c);
-		labels[1][3] = label;
+		labels[1][4] = label;
 		
-		label = formatLabel(" ");
+		//Adding blank label for player rank
+		label = formatLabel(" "); //Needs space
 		formatConstraints(c,0,0);
 		userScorePanel.add(label,c);
-		labels[0][3] = new JLabel();
+		labels[0][4] = new JLabel();
 		
+		//Adding user data
 		for(int i = 0; i < 3; i++){
 			label = formatLabel(data[i]);
 			formatConstraints(c,i+2,0);
 			userScorePanel.add(label,c);
-			labels[i+2][3] = label;
+			labels[i+2][4] = label;
 		}
 	}
 	
@@ -152,7 +155,11 @@ public class Leaderboards extends JPanel implements ActionListener{
 		topThreePanel.setBorder(BorderFactory.createLineBorder(color));
 		for(int i = 0; i < labels.length; i++){
 			for(int j = 0; j < labels[0].length; j++){
-				labels[i][j].setForeground(color);
+				try{
+					labels[i][j].setForeground(color);
+				}catch(NullPointerException e){
+					System.out.println("Not initialized: " + i + "," + j);
+				}
 			}
 		}
 	}
@@ -161,6 +168,7 @@ public class Leaderboards extends JPanel implements ActionListener{
 		if(color == color.WHITE) shipImage.setIcon(client.BLACK_SHIP);
 		else shipImage.setIcon(client.WHITE_SHIP);
 		this.setBackground(color);
+		shipImage.setBackground(color);
 		leaderboardsPanel.setBackground(color);
 		userScorePanel.setBackground(color);
 		topThreePanel.setBackground(color);
@@ -221,7 +229,6 @@ public class Leaderboards extends JPanel implements ActionListener{
         jButton5.setName(""); // NOI18N
 
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText();
         jLabel2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jLabel2.setOpaque(true);
 
