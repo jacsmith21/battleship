@@ -12,10 +12,6 @@ public class Client extends JFrame{
 	//general constants	
 	final int HEIGHT = 611;
 	final int WIDTH = 1027;
-	final ImageIcon BLACK_SHIP = new ImageIcon(  getClass().getResource("Images/black_ship.png")  );
-	final ImageIcon WHITE_SHIP = new ImageIcon(  getClass().getResource("Images/white_ship.png")  );
-	final String MUSIC = "music/ThemeMusic.wav";
-	
 	
 	private Container cp;
 	private Color fontColor;
@@ -30,10 +26,13 @@ public class Client extends JFrame{
 	private LineBorder border;
 	private boolean loggedIn; //game state
 	private boolean isColorBlind;
+	private boolean inLeaderboards;
 	private FloatControl musicControl;
 	private int musicLevel;
 	private int FXLevel;
 	private File themeMusicFile;
+	ImageIcon blackShip;
+ 	ImageIcon whiteShip;
 	
 	final boolean DEBUG = true;	
 		
@@ -41,10 +40,12 @@ public class Client extends JFrame{
 		super("Battleship");
 		
 		try{
-			themeMusicFile = new File(MUSIC);
+			themeMusicFile = new File("music/ThemeMusic.wav");
+			blackShip = new ImageIcon(  getClass().getResource("Images/black_ship.png")  );
+			whiteShip = new ImageIcon(  getClass().getResource("Images/white_ship.png")  );
 			
 		}catch(NullPointerException e){
-			System.out.println(e.getMessage());
+			System.out.println("music/Images folder not found!");
 		}
 		
 		try {
@@ -86,6 +87,7 @@ public class Client extends JFrame{
 		//Game states
 		loggedIn = false;
 		isColorBlind = false;
+		inLeaderboards = false;
 		
 		//Setting sound stuff
 		musicLevel = 50;
@@ -158,6 +160,7 @@ public class Client extends JFrame{
 		cp.remove(login);
 		cp.remove(pregame);
 		cp.remove(game);
+		inLeaderboards = false;
 		if(loggedIn) cp.add(pregame);
 		else cp.add(initial);
 		cp.revalidate();
@@ -168,6 +171,7 @@ public class Client extends JFrame{
 		cp.remove(game);
 		leaderboards.initLeaderboards();
 		cp.add(leaderboards);
+		inLeaderboards = true;
 		cp.revalidate();
 		cp.repaint();
 	}
@@ -475,9 +479,13 @@ public class Client extends JFrame{
 	}
 	
 	public void setMusicLevel(int value){ //0 <= value <= 100
-		double gain = value/100.0;
-		float dB = (float) (Math.log(gain) / Math.log(10.0) * 20.0);
-		musicControl.setValue(dB);
+		try{
+			double gain = value/100.0;
+			float dB = (float) (Math.log(gain) / Math.log(10.0) * 20.0);
+			musicControl.setValue(dB);
+		}catch(NullPointerException e){
+			System.out.println("Music folder not initialized!");
+		}
 	}
 	
 	public void setColors(Color font, Color background){
@@ -498,9 +506,11 @@ public class Client extends JFrame{
 		initial.setBackgroundColor(backgroundColor);
 		initial.setFontColor(fontColor);
 		initial.repaint();
-		leaderboards.setBackgroundColor(backgroundColor);
-		leaderboards.setFontColor(fontColor);
-		leaderboards.repaint();
+		if(inLeaderboards){
+			leaderboards.setBackgroundColor(backgroundColor);
+			leaderboards.setFontColor(fontColor);
+			leaderboards.repaint();
+		}
 	}
 	
 	
