@@ -16,8 +16,8 @@ public class Client extends JFrame{
 	//general constants	
 	final int HEIGHT = 611;
 	final int WIDTH = 1027;
-	final ImageIcon BLACK_SHIP = new ImageIcon(  getClass().getResource("/black_ship.png")  );
-	final ImageIcon WHITE_SHIP = new ImageIcon(  getClass().getResource("/white_ship.png")  );
+	final ImageIcon BLACK_SHIP = new ImageIcon(  getClass().getResource("Images/black_ship.png")  );
+	final ImageIcon WHITE_SHIP = new ImageIcon(  getClass().getResource("Images/white_ship.png")  );
 	final String MUSIC = "music/ThemeMusic.wav";
 	
 	
@@ -59,7 +59,6 @@ public class Client extends JFrame{
 		this.setResizable(false);
 		cp = this.getContentPane(); //Getting content pane
 		
-		
 		Scanner sc = new Scanner(System.in);
 		int port = sc.nextInt();
 		server = new ClientConnection();
@@ -74,6 +73,7 @@ public class Client extends JFrame{
 		initial = new Initial(this);
 		leaderboards = new Leaderboards(this);
 		cp.add(initial);
+		
 		
 		//Game states
 		loggedIn = false;
@@ -475,6 +475,9 @@ public class Client extends JFrame{
 		initial.setBackgroundColor(backgroundColor);
 		initial.setFontColor(fontColor);
 		initial.repaint();
+		leaderboards.setBackgroundColor(backgroundColor);
+		leaderboards.setFontColor(fontColor);
+		leaderboards.repaint();
 	}
 	
 	

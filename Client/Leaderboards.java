@@ -80,7 +80,7 @@ public class Leaderboards extends JPanel implements ActionListener{
 		addColumn("rank",ranks,0);
 		addColumn("username",names,1);
 		addColumn("wins",wins,2);
-		addColumn("loses",loses,3);
+		addColumn("losses",loses,3);
 		addColumn("scores",scores,4);
 	}
 	
@@ -151,7 +151,7 @@ public class Leaderboards extends JPanel implements ActionListener{
 		userScorePanel.setBorder(BorderFactory.createLineBorder(color));
 		topThreePanel.setBorder(BorderFactory.createLineBorder(color));
 		for(int i = 0; i < labels.length; i++){
-			for(int j = 0; i < labels[0].length; j++){
+			for(int j = 0; j < labels[0].length; j++){
 				labels[i][j].setForeground(color);
 			}
 		}
@@ -161,6 +161,7 @@ public class Leaderboards extends JPanel implements ActionListener{
 		if(color == color.WHITE) shipImage.setIcon(client.BLACK_SHIP);
 		else shipImage.setIcon(client.WHITE_SHIP);
 		this.setBackground(color);
+		leaderboardsPanel.setBackground(color);
 		userScorePanel.setBackground(color);
 		topThreePanel.setBackground(color);
 	}
@@ -220,7 +221,7 @@ public class Leaderboards extends JPanel implements ActionListener{
         jButton5.setName(""); // NOI18N
 
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("Image");
+        jLabel2.setText();
         jLabel2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jLabel2.setOpaque(true);
 

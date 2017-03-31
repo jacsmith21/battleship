@@ -36,13 +36,13 @@ public class Game extends JPanel {
 	//general constants
 	final int WIDTH = 420; //Enemy / user board width
 	final String ERROR = "err";
-	final ImageIcon GREEN_ICON = new ImageIcon(  getClass().getResource("/green_circle.png")  );
-	final ImageIcon BLUE_ICON = new ImageIcon(  getClass().getResource("/blue_circle.png")  );
-	final ImageIcon RED_ICON = new ImageIcon(  getClass().getResource("/red_circle.png")  );
-	final ImageIcon BLACK_SHIPS = new ImageIcon(  getClass().getResource("/black_ships.png")  );
-	final ImageIcon WHITE_SHIPS = new ImageIcon(  getClass().getResource("/white_ships.png")  );
-	final ImageIcon WHITE_COMMANDER = new ImageIcon(  getClass().getResource("/white_commander.png")  );
-	final ImageIcon BLACK_COMMANDER = new ImageIcon(  getClass().getResource("/black_commander.png")  );
+	final ImageIcon GREEN_ICON = new ImageIcon(  getClass().getResource("Images/green_circle.png")  );
+	final ImageIcon BLUE_ICON = new ImageIcon(  getClass().getResource("Images/blue_circle.png")  );
+	final ImageIcon RED_ICON = new ImageIcon(  getClass().getResource("Images/red_circle.png")  );
+	final ImageIcon BLACK_SHIPS = new ImageIcon(  getClass().getResource("Images/black_ships.png")  );
+	final ImageIcon WHITE_SHIPS = new ImageIcon(  getClass().getResource("Images/white_ships.png")  );
+	final ImageIcon WHITE_COMMANDER = new ImageIcon(  getClass().getResource("Images/white_commander.png")  );
+	final ImageIcon BLACK_COMMANDER = new ImageIcon(  getClass().getResource("Images/black_commander.png")  );
 	final String USER_HIT = "music/UserHit.wav";
 	final String USER_MISS = "music/UserMiss.wav";
 	final String ENEMY_HIT = "music/EnemyHit.wav";
@@ -481,7 +481,7 @@ public class Game extends JPanel {
             }
         });
 
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/black_commander.png"))); // NOI18N
+        jLabel3.setIcon((BLACK_COMMANDER)); // NOI18N
 
         jLabel4.setFont(new java.awt.Font("Orbitron", 0, 11)); // NOI18N
 
@@ -496,33 +496,33 @@ public class Game extends JPanel {
         //jPanel4.setLayout(new java.awt.GridLayout(10,10));
 
         jLabel6.setFont(new java.awt.Font("Orbitron", 0, 11)); // NOI18N
-        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/black_ships.png"))); // NOI18N
+        jLabel6.setIcon((BLACK_SHIPS)); // NOI18N
 
-        jLabel2.setIcon( new javax.swing.ImageIcon(getClass().getResource("/green_circle.png") )); // NOI18N
+        jLabel2.setIcon( (GREEN_ICON) ); // NOI18N
         jLabel2.setToolTipText("");
 
-        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/green_circle.png"))); // NOI18N
+        jLabel5.setIcon((GREEN_ICON)); // NOI18N
         jLabel5.setToolTipText("");
 
-        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/green_circle.png"))); // NOI18N
+        jLabel7.setIcon((GREEN_ICON)); // NOI18N
         jLabel7.setToolTipText("");
 
-        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/green_circle.png"))); // NOI18N
+        jLabel8.setIcon((GREEN_ICON)); // NOI18N
         jLabel8.setToolTipText("");
 
         jLabel9.setFont(new java.awt.Font("Orbitron", 0, 11)); // NOI18N
-        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/black_ships.png"))); // NOI18N
+        jLabel9.setIcon((BLACK_SHIPS)); // NOI18N
 
-        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/green_circle.png"))); // NOI18N
+        jLabel10.setIcon((GREEN_ICON)); // NOI18N
         jLabel10.setToolTipText("");
 
-        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/green_circle.png"))); // NOI18N
+        jLabel11.setIcon((GREEN_ICON)); // NOI18N
         jLabel11.setToolTipText("");
 
-        jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/green_circle.png"))); // NOI18N
+        jLabel12.setIcon((GREEN_ICON)); // NOI18N
         jLabel12.setToolTipText("");
 
-        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/green_circle.png"))); // NOI18N
+        jLabel13.setIcon((GREEN_ICON)); // NOI18N
         jLabel13.setToolTipText("");
 
         jLabel14.setFont(new java.awt.Font("Orbitron", 0, 24)); // NOI18N

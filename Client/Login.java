@@ -114,7 +114,6 @@ public class Login extends JPanel implements ActionListener{
 			if(response.equals("ack")){
 				client.send(password.getText());
 				response = client.receive();
-				System.out.println(response);
 				if(response.equals("ack")){
 					client.startPregame(username.getText());
 				} else{
