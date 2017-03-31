@@ -12,10 +12,6 @@ public class Client extends JFrame{
 	//general constants	
 	final int HEIGHT = 611;
 	final int WIDTH = 1027;
-	final ImageIcon BLACK_SHIP = new ImageIcon(  getClass().getResource("Images/black_ship.png")  );
-	final ImageIcon WHITE_SHIP = new ImageIcon(  getClass().getResource("Images/white_ship.png")  );
-	final String MUSIC = "music/ThemeMusic.wav";
-	
 	
 	private Container cp;
 	private Color fontColor;
@@ -30,30 +26,27 @@ public class Client extends JFrame{
 	private LineBorder border;
 	private boolean loggedIn; //game state
 	private boolean isColorBlind;
+	private boolean inLeaderboards;
+
 	private FloatControl musicControl;
 	private int musicLevel;
 	private int FXLevel;
 	private File themeMusicFile;
+	ImageIcon blackShip;
+	ImageIcon whiteShip;
 	
 	final boolean DEBUG = true;	
 		
 	public Client(){
 		super("Battleship");
-		
 		try{
-			themeMusicFile = new File(MUSIC);
-			
+			themeMusicFile = new File("music/ThemeMusic.wav");
+			blackShip = new ImageIcon(  getClass().getResource("Images/black_ship.png")  );
+			whiteShip = new ImageIcon(  getClass().getResource("Images/white_ship.png")  );
 		}catch(NullPointerException e){
-			System.out.println(e.getMessage());
+			System.out.println("music/Images folder not found!");
 		}
 		
-		try {
-     			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-     			ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("OrbitronMedium.ttf")));
-		} catch (IOException|FontFormatException e) {
-     			System.out.println("Error registering font!");
-		}
-
 		fontColor = Color.BLACK;
 		backgroundColor = Color.WHITE;
 		border = new LineBorder(Color.BLACK, 1);
@@ -61,7 +54,7 @@ public class Client extends JFrame{
 		this.setSize(WIDTH,HEIGHT);
 		this.setResizable(false);
 		cp = this.getContentPane(); //Getting content pane
-		
+		/*
 		Scanner sc = new Scanner(System.in);
 		System.out.print("Enter port: ");
 		int port = sc.nextInt();
@@ -71,7 +64,7 @@ public class Client extends JFrame{
 		
 		server = new ClientConnection();
 		server.createConnection(ip, port);
-		
+		*/
 		
 		//Game panel
 		register = new Register(this);
@@ -173,13 +166,14 @@ public class Client extends JFrame{
 	}
 	
 	public void displayHome(){
-
 		if(DEBUG) System.out.println("Displaying home dialogue");
 		JDialog d1=new JDialog();
 		
 		d1.getRootPane().setBorder(border);
-		d1.setUndecorated(true);
+		//d1.setUndecorated(true);
+		d1.setSize(300,75);
 		
+		d1.setLocationRelativeTo(this);
 		d1.getContentPane().setBackground( Color.WHITE );
 		d1.setLayout(new FlowLayout());
 		
@@ -220,14 +214,7 @@ public class Client extends JFrame{
 		yesnoButtons.add(no);
 
 		d1.add(yesnoButtons);
-
-		d1.setPreferredSize(new Dimension(300, 75));
 		d1.pack();
-	
-		d1.setLocationRelativeTo(this);
-
-		d1.repaint();
-		
 		d1.setVisible(true);
 	}
 	
@@ -238,6 +225,8 @@ public class Client extends JFrame{
 		JDialog d1=new JDialog();
 		d1.getContentPane().setBackground( Color.WHITE );
 		d1.setUndecorated(true);
+		d1.setSize(310,350);
+		d1.setLocationRelativeTo(this);
 
 		JPanel returnButton = new JPanel();
 		returnButton.setBackground(Color.WHITE);
@@ -287,13 +276,9 @@ public class Client extends JFrame{
 		d1.add(info2);
 		returnButton.add(returnToGame);
 		d1.add(returnButton);
-
-		d1.setPreferredSize(new Dimension(350, 350));
 		d1.pack();
-	
-		d1.setLocationRelativeTo(this);
 
-		d1.repaint();
+		//d1.add(tester);
 
 		d1.setVisible(true);
 	}
@@ -308,6 +293,8 @@ public class Client extends JFrame{
 		JDialog d1=new JDialog();
 
 		d1.setUndecorated(true);
+		d1.setSize(320,375);
+		d1.setLocationRelativeTo(this);
 		d1.setLayout(new FlowLayout());
 		d1.getContentPane().setBackground( Color.WHITE );
 		d1.getRootPane().setBorder(border);
@@ -460,14 +447,7 @@ public class Client extends JFrame{
 		d1.add(tester);
 		d1.add(restoreDefaults);
 		d1.add(ok);
-
-		d1.setPreferredSize(new Dimension(320, 375));
 		d1.pack();
-	
-		d1.setLocationRelativeTo(this);
-
-		d1.repaint();
-
 		this.revalidate();
 		this.repaint();
 		
@@ -475,9 +455,13 @@ public class Client extends JFrame{
 	}
 	
 	public void setMusicLevel(int value){ //0 <= value <= 100
-		double gain = value/100.0;
-		float dB = (float) (Math.log(gain) / Math.log(10.0) * 20.0);
-		musicControl.setValue(dB);
+		try{
+			double gain = value/100.0;
+			float dB = (float) (Math.log(gain) / Math.log(10.0) * 20.0);
+			musicControl.setValue(dB);
+		}catch(NullPointerException e){
+			System.out.println("Music folder not initialized!");
+		}
 	}
 	
 	public void setColors(Color font, Color background){
@@ -498,9 +482,11 @@ public class Client extends JFrame{
 		initial.setBackgroundColor(backgroundColor);
 		initial.setFontColor(fontColor);
 		initial.repaint();
-		leaderboards.setBackgroundColor(backgroundColor);
-		leaderboards.setFontColor(fontColor);
-		leaderboards.repaint();
+		if(inLeaderboards){
+			leaderboards.setBackgroundColor(backgroundColor);
+			leaderboards.setFontColor(fontColor);
+			leaderboards.repaint();
+		}
 	}
 	
 	
