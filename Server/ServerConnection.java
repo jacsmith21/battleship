@@ -10,8 +10,8 @@ public class ServerConnection extends Connection{
 
     public ServerConnection(){ }
 
-    public void createServer(int port){
-        server = null;
+    public static ServerSocket createServer(int port){
+        ServerSocket server = null;
         boolean found = false;
         while(!found){
             //port++;
@@ -25,9 +25,11 @@ public class ServerConnection extends Connection{
                 System.exit(-1);
             }
         }
+		return server;
     }
 
-    public void startConnection(){
+    public void startConnection(ServerSocket server){
+		this.server = server;
         Socket socket = null;
         try {
             socket = server.accept();

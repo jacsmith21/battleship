@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.net.ServerSocket;
 
 /**
  * Created by Tristen Tulkens and Jacob Smith on 2017-02-10.
@@ -12,6 +13,8 @@ public class GameManager {
     private ServerConnection player2;
     private String player1Message;
     private String player2Message;
+	private String player1Name;
+	private String player2Name;
     
     final boolean DEBUG = true;
 
@@ -19,14 +22,14 @@ public class GameManager {
         db = new DBManager();
         player1 = new ServerConnection();
         player2 = new ServerConnection();
-        player1.createServer(2043);
-        player2.createServer(2044);
-        player1.startConnection();
-        player2.startConnection();
+		ServerSocket server = ServerConnection.createServer(2043);
+        player1.startConnection(server);
+        player2.startConnection(server);
         if(DEBUG) System.out.println("All clients connected");
         setupUsers();
         initializeBoards();
         loop();
+		endGame();
     }
 
     public void setupUsers(){
@@ -35,25 +38,28 @@ public class GameManager {
         String[] info = player1Message.split(",");
         if(info[0].equals("N")){
         	if(DEBUG) System.out.println("Signing up player one!");
-            signup(info[1], player1);
+            player1Name = signup(info[1], player1);
             
         } else if(info[0].equals("R")){
         	if(DEBUG) System.out.println("Logging in player one!");
-            login(info[1], player1);
+            player1Name = login(info[1], player1);
         }
 
         player2Message = player2.recieve();
         String[] info2 = player2Message.split(",");
         if(info2[0].equals("N")){
         	if(DEBUG) System.out.println("Signing up player two!");
-            signup(info2[1], player2);
+            player2Name = signup(info2[1], player2);
         } else if(info2[0].equals("R")){
         	if(DEBUG) System.out.println("Logging in player two!");
-            login(info2[1], player2);
+            player2Name = login(info2[1], player2);
         }
+		
+		if(DEBUG) System.out.println("Player 1: " + player1Name + " ready to play!");
+		if(DEBUG) System.out.println("Player 2: " + player2Name + " ready to play!");
     }
 
-    public void signup(String user, ServerConnection player){
+    public String signup(String user, ServerConnection player){
     	if(DEBUG) System.out.println("Validating username!");
         String check = db.newUserNameCheck(user);
         player.send(check);
@@ -66,10 +72,11 @@ public class GameManager {
         String password = player.recieve();
         db.createNewUser(user, password);
         player.send("ack");
+		return user;
 
     }
 
-    public void login(String user, ServerConnection player){
+    public String login(String user, ServerConnection player){
         int fails = 0;
         if(DEBUG) System.out.println("Checking login username!");
         String check = db.returningUserNameCheck(user);
@@ -92,6 +99,7 @@ public class GameManager {
             check = db.returningPasswordCheck(user, password);
             player.send(check);
         }
+		return user;
     }
 
     public void initializeBoards(){
@@ -135,8 +143,12 @@ public class GameManager {
                     String result = player2Board.checkIfHit(player1Message);
                     player1.send(result);
                     if(result.contains("win")){
+						db.updateLeaders(player1Name,'w');
+						db.updateLeaders(player2Name,'l');
                         player2.send(player1Message+","+result.replace("win", "loss"));
                         gameOver = true;
+						p1Turn = false;
+						p2Turn = false;
                         break;
                     } else {
                         player2.send(player1Message + "," + result);
@@ -153,9 +165,12 @@ public class GameManager {
                     String result = player1Board.checkIfHit(player2Message);
                     player2.send(result);
                     if(result.contains("win")){
+						db.updateLeaders(player1Name,'l');
+						db.updateLeaders(player2Name,'w');
                         player1.send(player2Message+","+result.replace("win", "loss"));
                         gameOver = true;
-                        int gag = 4;
+						p1Turn = false;
+						p2Turn = false;
                         break;
                     } else {
                         player1.send(player2Message + "," + result);
@@ -166,4 +181,14 @@ public class GameManager {
             }
         }
     }
+	
+	public void endGame(){
+		player1.send(db.retrieveWinLossScore(player1Name));
+		player2.send(db.retrieveWinLossScore(player2Name));
+		String topThree = db.retrieveLeaderBoard();
+		player1.send(topThree);
+		player2.send(topThree);
+		player1.closeConnection();
+		player2.closeConnection();
+	}
 }

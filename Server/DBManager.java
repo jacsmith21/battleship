@@ -11,6 +11,8 @@ public class DBManager {
 
     java.sql.Connection c = null;
     Statement stmt = null;
+	
+	final boolean DEBUG = true;
 
     public DBManager(){
 
@@ -21,7 +23,7 @@ public class DBManager {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
             System.exit(0);
         }
-        System.out.println("Opened database successfully");
+        if(DEBUG) System.out.println("Opened database successfully");
     }
 
     public String newUserNameCheck(String username){
@@ -174,7 +176,6 @@ public class DBManager {
         } catch(Exception e){
             System.out.println(e);
         }
-
     }
 
     public String retrieveLeaderBoard(){
@@ -193,11 +194,30 @@ public class DBManager {
             result = result.substring(0, result.length()-1);
 
         } catch(Exception e){
-
+			System.out.println(e.getMessage());
         }
 
         return result;
-
     }
+	
+	public String retrieveWinLossScore(String user){
+		ResultSet rs;
+        Statement stmt;
+        String result = "";
+        try {
+            String command = "SELECT Wins, Losses, Score FROM Users WHERE Username = '" + user + "'";
+            stmt = c.createStatement();
+            rs = stmt.executeQuery(command);
+
+            while(rs.next()){
+                result = rs.getInt("Wins") + "," + rs.getInt("Losses") + "," + rs.getInt("Score");
+            }
+
+        } catch(Exception e){
+			System.out.println(e.getMessage());
+        }
+		
+		return result;
+	}
 
 }
