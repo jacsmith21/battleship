@@ -91,8 +91,8 @@ public class Game extends JPanel {
 		
 		try{
 			greenIcon = new ImageIcon(  getClass().getResource("Images/green_circle.png")  );
-			blueIcon = new ImageIcon(  getClass().getResource("Images/green_circle.png")  );
-			redIcon = new ImageIcon(  getClass().getResource("Images/green_circle.png")  );
+			blueIcon = new ImageIcon(  getClass().getResource("Images/blue_circle.png")  );
+			redIcon = new ImageIcon(  getClass().getResource("Images/red_circle.png")  );
 			blackShips = new ImageIcon(  getClass().getResource("Images/black_ships.png")  );
 			whiteShips = new ImageIcon(  getClass().getResource("Images/white_ships.png")  );
 			blackCommander = new ImageIcon(  getClass().getResource("Images/black_commander.png")  );
@@ -382,6 +382,7 @@ public class Game extends JPanel {
 	public void updateEnemyStatusIcons(String ship){
 		for(ShipStatusIcon icon : enemyShipStatusIcons){
 			if((icon.getName()).equals(ship)){
+				if(DEBUG) System.out.println("updating enemy ships icons");
 				icon.setIcon(redIcon);
 				icon.setSunk();
 			}
@@ -391,6 +392,7 @@ public class Game extends JPanel {
 	public void updateUserStatusIcons(String ship){
 		for(ShipStatusIcon icon : userShipStatusIcons){
 			if((icon.getName()).equals(ship)){
+				if(DEBUG) System.out.println("updating yser ships icons");
 				icon.setIcon(redIcon);
 				icon.setSunk();
 			}
