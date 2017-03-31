@@ -200,6 +200,8 @@ public class DBManager {
         ResultSet rs;
         Statement stmt;
         String result = "";
+	int count = 0;
+
         try {
             String command = "SELECT Username, Wins, Losses, Score FROM Users WHERE Rank IN (1,2,3) ORDER BY Rank";
             stmt = c.createStatement();
@@ -207,7 +209,12 @@ public class DBManager {
 
             while(rs.next()){
                 result = result + rs.getString("Username") + "," + rs.getInt("Wins") + "," + rs.getInt("Losses") + "," + rs.getInt("Score") + ",";
+		count++;
             }
+
+	    while(count < 3){
+		result = result + " ,0,0,0,"; 
+	    }
 
             result = result.substring(0, result.length()-1);
 
