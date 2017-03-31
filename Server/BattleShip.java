@@ -4,9 +4,7 @@
 public class BattleShip {
 
     public static void main(String[] args){
-	while(true){
-        	GameManager gm = new GameManager();
-	}
+        GameManager gm = new GameManager();
     }
 
 }

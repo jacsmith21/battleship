@@ -26,10 +26,12 @@ public class GameManager {
         player1.startConnection(server);
         player2.startConnection(server);
         if(DEBUG) System.out.println("All clients connected");
-        setupUsers();
-        initializeBoards();
-        loop();
-		endGame();
+        while(true){
+		    setupUsers();
+		    initializeBoards();
+		    loop();
+			endGame();
+		}
     }
 
     public void setupUsers(){
@@ -188,7 +190,5 @@ public class GameManager {
 		String topThree = db.retrieveLeaderBoard();
 		player1.send(topThree);
 		player2.send(topThree);
-		player1.closeConnection();
-		player2.closeConnection();
 	}
 }
