@@ -213,7 +213,8 @@ public class DBManager {
             }
 
 	    while(count < 3){
-		result = result + " ,0,0,0,"; 
+		result = result + " ,0,0,0,";
+		count++; 
 	    }
 
             result = result.substring(0, result.length()-1);
