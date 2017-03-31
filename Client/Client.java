@@ -12,10 +12,6 @@ public class Client extends JFrame{
 	//general constants	
 	final int HEIGHT = 611;
 	final int WIDTH = 1027;
-	final ImageIcon BLACK_SHIP = new ImageIcon(  getClass().getResource("Images/black_ship.png")  );
-	final ImageIcon WHITE_SHIP = new ImageIcon(  getClass().getResource("Images/white_ship.png")  );
-	final String MUSIC = "music/ThemeMusic.wav";
-	
 	
 	private Container cp;
 	private Color fontColor;
@@ -30,21 +26,24 @@ public class Client extends JFrame{
 	private LineBorder border;
 	private boolean loggedIn; //game state
 	private boolean isColorBlind;
+
 	private FloatControl musicControl;
 	private int musicLevel;
 	private int FXLevel;
 	private File themeMusicFile;
+	ImageIcon blackShip;
+	ImageIcon whiteShip;
 	
 	final boolean DEBUG = true;	
 		
 	public Client(){
 		super("Battleship");
-		
 		try{
-			themeMusicFile = new File(MUSIC);
-			
+			themeMusicFile = new File("music/ThemeMusic.wav");
+			blackShip = new ImageIcon(  getClass().getResource("Images/black_ship.png")  );
+			whiteShip = new ImageIcon(  getClass().getResource("Images/white_ship.png")  );
 		}catch(NullPointerException e){
-			System.out.println(e.getMessage());
+			System.out.println("music/Images folder not found!");
 		}
 		
 		fontColor = Color.BLACK;
@@ -453,9 +452,13 @@ public class Client extends JFrame{
 	}
 	
 	public void setMusicLevel(int value){ //0 <= value <= 100
-		double gain = value/100.0;
-		float dB = (float) (Math.log(gain) / Math.log(10.0) * 20.0);
-		musicControl.setValue(dB);
+		try{
+			double gain = value/100.0;
+			float dB = (float) (Math.log(gain) / Math.log(10.0) * 20.0);
+			musicControl.setValue(dB);
+		}catch(NullPointerException e){
+			System.out.println("Music folder not initialized!");
+		}
 	}
 	
 	public void setColors(Color font, Color background){
