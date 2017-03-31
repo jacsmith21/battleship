@@ -26,6 +26,7 @@ public class Login extends JPanel implements ActionListener{
 	private JButton login;
 	private JTextField username;
 	private JTextField password;
+	private boolean validUsername;
 
     public Login(Client client){
 		this.client = client;
@@ -57,6 +58,7 @@ public class Login extends JPanel implements ActionListener{
 		informationFields.add(username);
 		informationFields.add(password);
 		
+		validUsername = false;
 		login.setText("login");
 		login.setFont( new Font("Orbitron", 0, 15) );
 		login.setOpaque(true);
@@ -105,22 +107,25 @@ public class Login extends JPanel implements ActionListener{
 	}
 	
 	public void actionPerformed(ActionEvent e){
+		String response = "";
 		if(e.getSource() == login){
-			String toSend = "R," + username.getText();
-			System.out.println(toSend);
-			client.send(toSend);
-			String response = client.receive();
-			System.out.println(response);
-			if(response.equals("ack")){
+			if(!validUsername){
+				String toSend = "R," + username.getText();
+				System.out.println(toSend);
+				client.send(toSend);
+				response = client.receive();
+				if(response.equals("ack")) validUsername = true;
+			}
+			if(validUsername){
 				client.send(password.getText());
 				response = client.receive();
 				if(response.equals("ack")){
 					client.startPregame(username.getText());
 				} else{
-					//label.setText(response);
+					password.setText(response);
 				}
 			} else{
-				//label.setText(response);
+				username.setText(response);
 			}
 		}else if(e.getSource() == home){
 			client.displayHome();

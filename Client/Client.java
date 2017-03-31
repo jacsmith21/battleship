@@ -161,9 +161,14 @@ public class Client extends JFrame{
 		cp.remove(pregame);
 		cp.remove(game);
 		cp.remove(leaderboards);
-		inLeaderboards = false;
-		if(loggedIn && !inLeaderboards) cp.add(pregame);
-		else cp.add(initial);
+		if(inLeaderboards){
+			inLeaderboards = false;
+			game = new Game(this);
+			register = new Register(this);
+			login = new Login(this);
+			leaderboards = new Leaderboards(this);
+		}
+		cp.add(initial);
 		cp.revalidate();
 		cp.repaint();
 	}
@@ -453,7 +458,8 @@ public class Client extends JFrame{
 				}
 				if(BW.isSelected()) setColors(Color.BLACK, Color.WHITE);
 				else setColors(Color.WHITE, Color.BLACK);
-
+				game.refreshButtonColors();
+				if(DEBUG) System.out.println("HEY");
 				setMusicLevel(musicSliders.getValue());
 				game.setFXLevel(FXVolSlider.getValue());
 				musicLevel = musicSliders.getValue();

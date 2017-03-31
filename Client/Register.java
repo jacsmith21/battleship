@@ -27,6 +27,7 @@ public class Register extends JPanel implements ActionListener{
 	private JTextField username;
 	private JTextField password;
 	private JTextField repassword;
+	private boolean validUsername;
 
     public Register(Client client){
 		this.client = client;
@@ -67,6 +68,7 @@ public class Register extends JPanel implements ActionListener{
 		register.setFont( new Font("Orbitron", 0, 15) );
 		register.setOpaque(true);
 		register.setBorderPainted(true);
+		validUsername = false;
 		
 		this.addActionListeners();
 		this.setBackgroundColor(client.getBackgroundColor());
@@ -113,23 +115,27 @@ public class Register extends JPanel implements ActionListener{
 	}
 	
 	public void actionPerformed(ActionEvent e){
+		String response = "";
 		if(e.getSource() == register){
-			String toSend = "N," + username.getText();
-			client.send(toSend);
-			String response = client.receive();
-			if(response.equals("ack")){
-				client.send(password.getText());
+			if(!validUsername){
+				String toSend = "N," + username.getText();
+				client.send(toSend);
 				response = client.receive();
+				if(response.equals("ack")) validUsername = true;
+				else username.setText(response);
+			}
+			if(validUsername){
 				if(!password.getText().equals(repassword.getText())){
-					response = "Passwords must match!";
+					response = ("Passwords must match!");
+				}else{
+					client.send(password.getText());
+					response = client.receive();
 				}
 				if(response.equals("ack")){
 					client.startPregame(username.getText());
-				} else{
-					//label.setText(response);
+				}else{
+					repassword.setText(response);
 				}
-			} else{
-				//label.setText(response);
 			}
 		}else if(e.getSource() == home){
 			client.displayHome();

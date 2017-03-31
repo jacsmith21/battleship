@@ -127,6 +127,23 @@ public class GridPanel extends JPanel implements MouseListener, MouseMotionListe
 		}
 	}
 	
+	public void refreshShips(){
+	}
+	
+	public void refreshButtonColors(){
+		System.out.println("Refreshing buttons!");
+		GridButton b;
+		for(int i = 0; i < buttons.length; i++){
+			for(int j = 0; j < buttons[0].length; j++){
+				b = buttons[i][j];
+				if(b.isHit()){
+					if(DEBUG) System.out.println("Setting red button: " + button.getCoordinate());
+					b.setBackground(HIT);
+				}
+			}
+		}
+	}
+	
 	/** Updates the enemy's board depending on the message recieved back from the server
 		@param message the message recieved back from the server
 	*/
@@ -134,10 +151,12 @@ public class GridPanel extends JPanel implements MouseListener, MouseMotionListe
 		//button = most recent clicked button
 		if(message.contains("sunk")){
 			String ship = (message.split(" "))[1];
-			button.setBackground(HIT); 
+			button.setBackground(HIT);
+			button.setEnabled(false);
 			game.updateEnemyStatusIcons(ship);
 		}else if(message.contains("hit")){
 			button.setBackground(HIT);
+			button.setEnabled(false);
 		}else{
 			button.setBackground(MISS);
 		}
@@ -150,8 +169,10 @@ public class GridPanel extends JPanel implements MouseListener, MouseMotionListe
 			String ship = (  ((message.split(","))[1]  ).split(" "))[1]; 
 			button.setBackground(HIT);
 			game.updateUserStatusIcons(ship);
+			button.setHit(true);
 		}else if(message.contains("hit")){
 			button.setBackground(HIT);
+			button.setHit(true);
 		}else{
 			button.setBackground(MISS);
 		}

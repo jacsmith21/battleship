@@ -83,7 +83,7 @@ public class Game extends JPanel {
 	private Clip enemyHitClip;
 	private Clip enemyMissClip;
 	
-	final boolean DEBUG = true;
+	final boolean DEBUG = false;
 	
 	/** Constructor for the game JPanel */
     public Game(Client client){
@@ -152,6 +152,11 @@ public class Game extends JPanel {
 	
 	public void setName(String name){
 		jLabel16.setText(name);
+	}
+	
+	public void refreshButtonColors(){
+		if(DEBUG) System.out.println("HEY");
+		userBoard.refreshButtonColors();
 	}
 	
 	public void initFX(){
@@ -241,7 +246,7 @@ public class Game extends JPanel {
 		}else{ 
 			ships1.setIcon(whiteShips);
 			ships2.setIcon(whiteShips);
-			commanderImage.setIcon(blackCommander);
+			commanderImage.setIcon(whiteCommander);
 		}
 		gamePanel.setBackground(color);
 		this.setBackground(color);
