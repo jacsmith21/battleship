@@ -357,23 +357,25 @@ public class Game extends JPanel {
 	}
 	
 	private void playFX(String message){
-		if(attack){
-			if(message.contains("hit")){
-				enemyHitClip.setFramePosition(0);
-				enemyHitClip.start();
+		try{
+			if(attack){
+				if(message.contains("hit")){
+					enemyHitClip.setFramePosition(0);
+					enemyHitClip.start();
+				}else{
+					enemyMissClip.setFramePosition(0);
+					enemyMissClip.start();
+				}
 			}else{
-				enemyMissClip.setFramePosition(0);
-				enemyMissClip.start();
+				if(message.contains("hit")){
+					userHitClip.setFramePosition(0);
+					userHitClip.start();
+				}else{
+					userMissClip.setFramePosition(0);	
+					userMissClip.start();
+				}
 			}
-		}else{
-			if(message.contains("hit")){
-				userHitClip.setFramePosition(0);
-				userHitClip.start();
-			}else{
-				userMissClip.setFramePosition(0);	
-				userMissClip.start();
-			}
-		}
+		}catch(NullPointerException e){ }
 	}
 	
 	public void updateEnemyStatusIcons(String ship){
