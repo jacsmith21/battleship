@@ -84,8 +84,8 @@ public class Initial extends JPanel implements ActionListener{
 	}
 	
 	public void setBackgroundColor(Color color){
-		if(color == color.WHITE) shipImage.setIcon(client.blackShip);
-		else shipImage.setIcon(client.whiteShip);
+		if(color == color.WHITE) shipImage.setIcon(client.BLACK_SHIP);
+		else shipImage.setIcon(client.WHITE_SHIP);
 		this.setBackground(color);
 		initialPanel.setBackground(color);
 		login.setBackground(color);

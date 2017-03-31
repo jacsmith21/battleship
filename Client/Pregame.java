@@ -80,8 +80,8 @@ public class Pregame extends JPanel implements ActionListener{
 	}
 	
 	public void setBackgroundColor(Color color){
-		if(color == color.WHITE) shipImage.setIcon(client.blackShip);
-		else shipImage.setIcon(client.whiteShip);
+		if(color == color.WHITE) shipImage.setIcon(client.BLACK_SHIP);
+		else shipImage.setIcon(client.WHITE_SHIP);
 		this.setBackground(color);
 		pregame.setBackground(color);
 		play.setBackground(color);
