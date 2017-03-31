@@ -149,29 +149,47 @@ public class DBManager {
 
             while(rs.next()){
                 Date newDate = df.parse(rs.getString("LastPlayed"));
-                players.add(new Player(newDate, rs.getString("Username"), rs.getInt("Score")));
+                Player player = new Player(newDate, rs.getString("Username"), rs.getInt("Score"));
+                players.add(player);
+                if(DEBUG) System.out.println("New Player: " + player.getName() + ", score: " + player.getScore());
             }
-
-            for(int i = 0; i < players.size(); i++){
-                Player check = players.get(i);
+             
+			Player max;
+			Player temp;
+			int locMax;
+            for(int i = 0; i < (players.size()-1); i++){
+                max = players.get(i);
+                locMax = i;
                 for(int j = i+1; j < players.size(); j++){
-                    Player temp = players.get(j);
-                    if(temp.getScore() > check.getScore()){
-                        players.set(i, temp);
-                        players.set(j, check);
-                    } else if(temp.getScore() == check.getScore()){
-                        if(temp.getDate().before(check.getDate())){
-                            players.set(i, temp);
-                            players.set(j, check);
+                	temp = players.get(j);
+                    if(max.getScore() < temp.getScore()){
+                        max = temp;
+                        locMax = j;
+                    } else if(temp.getScore() == max.getScore()){
+                        if(temp.getDate().before(max.getDate())){
+                            max = temp;
+                            locMax = j;
                         }
                     }
                 }
+                players.set(locMax,players.get(i));
+                players.set(i,max);
             }
-
+            
+            //Setting ranks to match the rank of the list
             for(int i = 0; i < players.size(); i++){
-                command = "UPDATE Users SET Rank = "+(i+1)+" WHERE Username = '"+players.get(i).getName()+"'";
-                stmt.executeUpdate(command);
+            	command = "UPDATE Users SET Rank = '"+ (i+1) +"' WHERE Username = '"+(players.get(i)).getName()+"'";
+            	stmt.executeUpdate(command);
             }
+            
+            if(DEBUG){
+            	System.out.println("\nNEW LIST");
+		        for(int i = 0; i < players.size(); i++){
+		        	Player player = players.get(i);
+		        	System.out.println((i+1) + ". " + player.getName() + ", score: " + player.getScore());
+		        }
+		        System.out.println();
+			}
 
         } catch(Exception e){
             System.out.println(e);

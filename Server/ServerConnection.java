@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.Inet4Address;
 
 /**
  * Created by Tristen Tulkens and Jacob Smith on 2017-02-20.
@@ -25,6 +26,7 @@ public class ServerConnection extends Connection{
                 System.exit(-1);
             }
         }
+        
 		return server;
     }
 
