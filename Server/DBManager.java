@@ -12,7 +12,7 @@ public class DBManager {
     java.sql.Connection c = null;
     Statement stmt = null;
 	
-	final boolean DEBUG = true;
+	final boolean DEBUG = false;
 
     public DBManager(){
 

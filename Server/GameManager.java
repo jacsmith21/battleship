@@ -16,7 +16,7 @@ public class GameManager {
 	private String player1Name;
 	private String player2Name;
     
-    final boolean DEBUG = true;
+    final boolean DEBUG = false;
 
     public GameManager(){
         db = new DBManager();
@@ -36,7 +36,7 @@ public class GameManager {
 
     public void setupUsers(){
         player1Message = player1.recieve();
-        System.out.println("Received " + player1Message);
+        if(DEBUG) System.out.println("Received " + player1Message);
         String[] info = player1Message.split(",");
         if(info[0].equals("N")){
         	if(DEBUG) System.out.println("Signing up player one!");

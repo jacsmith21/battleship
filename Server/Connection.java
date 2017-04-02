@@ -10,6 +10,8 @@ public class Connection{
     private PrintWriter out;
 
     public Connection(){}
+    
+    final boolean DEBUG = false;
 
     public void startConnection(Socket socket){
         this.socket = socket;
@@ -28,12 +30,12 @@ public class Connection{
         }catch(IOException e){
             System.err.println("Unable to read from " + e.getMessage());
         }
-        System.out.println("RECEIVING: " + text);
+        if(DEBUG) System.out.println("RECEIVING: " + text);
         return text;
     }
 
     public void send(String output){
-    	System.out.println("SENDING: " + output);
+    	if(DEBUG) System.out.println("SENDING: " + output);
         out.println(output); //Doesn't ever throw IO exception
     }
 
