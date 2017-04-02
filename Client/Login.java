@@ -111,7 +111,6 @@ public class Login extends JPanel implements ActionListener{
 		if(e.getSource() == login){
 			if(!validUsername){
 				String toSend = "R," + username.getText();
-				System.out.println(toSend);
 				client.send(toSend);
 				response = client.receive();
 				if(response.equals("ack")){

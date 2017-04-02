@@ -29,7 +29,7 @@ public class GridPanel extends JPanel implements MouseListener, MouseMotionListe
 	private ShipLabel[] ships;
 	private GridButton button; //The last GridButton that has been clicked on
 	
-	private final boolean DEBUG = true;
+	private final boolean DEBUG = false;
 	
 	public GridPanel(Game game){
 		this.game = game;

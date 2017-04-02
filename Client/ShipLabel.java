@@ -12,7 +12,7 @@ public class ShipLabel extends JLabel{
 	private boolean selected;
 	private GridPanel panel;
 
-	private final boolean DEBUG = true;
+	private final boolean DEBUG = false;
 	
 	public ShipLabel(int x, int y, int length, String name, char orientation, GridPanel panel){
 		this.x = x;
@@ -54,7 +54,5 @@ public class ShipLabel extends JLabel{
 	public void setDrag(boolean drag){ this.drag = drag; }
 	
 	public void setSelected(boolean selected){ this.selected = selected; }
-
-	
 
 }
