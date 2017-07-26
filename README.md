@@ -1,5 +1,5 @@
 # Battleship
-Battleship game for CS2043
+Battleship game using Java
 
 ## General
 The main file of ther server is BattleShip, it will print the port number for the two clients. The first to connect will be player one, the second will be player two.
