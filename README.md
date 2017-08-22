@@ -19,6 +19,8 @@ javac -classpath ".:sqlite-jdbc-3.16.1.jar" BattleShip.java
 
 java -classpath ".:sqlite-jdbc-3.16.1.jar" BattleShip
 
+## Screenshot
+![Game Play](https://github.com/jacsmith21/battleship/blob/master/battleship.png)
 ## Other Important Information
 There must be a folder named "Images" in the Client folder; however, the game should run without the images.
 
