@@ -32,15 +32,23 @@ java Client
 
 
 ## Screenshot
-<img src="https://i.ibb.co/n1PYRpb/battleship.png" alt="battleship" border="0">
+![Regular Gameplay](https://i.ibb.co/n1PYRpb/battleship.png)
+
 > Regular Gameplay
 
-<img src="https://i.ibb.co/wRHbnj6/darkbattlesihp.png" alt="darkbattlesihp" border="0">
+<br/>
+
+![Dark Mode](https://i.ibb.co/wRHbnj6/darkbattlesihp.png)
+
 > Dark Mode
 
-<img src="https://i.ibb.co/jMfzPKQ/leaderboard.png" alt="leaderboard" border="0">
-> Leaderboards
+<br/>
 
+![Leaderboards](https://i.ibb.co/jMfzPKQ/leaderboard.png)
+
+<br/>
+
+> Leaderboards
 
 ## Other Important Information
 1. Returning to the home screen after signing in or registering will cause errors in the game. The protocol does not support moving back and forth between game states. 
