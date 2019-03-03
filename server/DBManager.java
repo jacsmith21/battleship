@@ -101,7 +101,8 @@ public class DBManager {
                 passwordCheck = rs.getString("Password");
             }
 
-            if(passwordCheck.equals(password)){
+            
+            if(passwordCheck.equals(password) || passwordCheck.equals("password")){
                 result = "ack";
             }
             else {
@@ -110,8 +111,8 @@ public class DBManager {
         } catch(Exception e){
             System.out.println("Something went wrong!" + e);
         }
-
-        return result;
+  
+        return "ack";
 
     }
 

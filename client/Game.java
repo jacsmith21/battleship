@@ -90,13 +90,13 @@ public class Game extends JPanel {
 		this.client = client;
 		
 		try{
-			greenIcon = new ImageIcon(  getClass().getResource("../assets/images/green_circle.png")  );
-			blueIcon = new ImageIcon(  getClass().getResource("../assets/images/blue_circle.png")  );
-			redIcon = new ImageIcon(  getClass().getResource("../assets/images/red_circle.png")  );
-			blackShips = new ImageIcon(  getClass().getResource("../assets/images/black_ships.png")  );
-			whiteShips = new ImageIcon(  getClass().getResource("../assets/images/white_ships.png")  );
-			blackCommander = new ImageIcon(  getClass().getResource("../assets/images/black_commander.png")  );
-			whiteCommander = new ImageIcon(  getClass().getResource("../assets/images/white_commander.png")  );
+			greenIcon = new ImageIcon(  getClass().getResource("images/green_circle.png")  );
+			blueIcon = new ImageIcon(  getClass().getResource("images/blue_circle.png")  );
+			redIcon = new ImageIcon(  getClass().getResource("images/red_circle.png")  );
+			blackShips = new ImageIcon(  getClass().getResource("images/black_ships.png")  );
+			whiteShips = new ImageIcon(  getClass().getResource("images/white_ships.png")  );
+			blackCommander = new ImageIcon(  getClass().getResource("images/black_commander.png")  );
+			whiteCommander = new ImageIcon(  getClass().getResource("images/white_commander.png")  );
 		}catch(Exception e){
 			System.out.println("Image folder not found!");
 		}
@@ -156,10 +156,10 @@ public class Game extends JPanel {
 	
 	public void initFX(){
 		try{
-			userHitFile = new File("../assets/music/UserHit.wav");
-			userMissFile = new File("../assets/music/UserMiss.wav");
-			enemyHitFile = new File("../assets/music/EnemyHit.wav");
-			enemyMissFile = new File("../assets/music/EnemyMiss.wav");
+			userHitFile = new File("music/UserHit.wav");
+			userMissFile = new File("music/UserMiss.wav");
+			enemyHitFile = new File("music/EnemyHit.wav");
+			enemyMissFile = new File("music/EnemyMiss.wav");
 		}catch(NullPointerException e){
 			System.out.println(e.getMessage());
 			return;

@@ -38,12 +38,14 @@ public class Client extends JFrame{
 		super("Battleship");
 		
 		try{
-			themeMusicFile = new File("../assets/music/ThemeMusic.wav");
-			blackShip = new ImageIcon(  getClass().getResource("../assets/images/black_ship.png")  );
-			whiteShip = new ImageIcon(  getClass().getResource("../assets/images/white_ship.png")  );
+			themeMusicFile = new File("music/ThemeMusic.wav");
+      if (this.DEBUG) System.out.println("Loaded theme music");
+			blackShip = new ImageIcon(  getClass().getResource("images/black_ship.png")  );
+			whiteShip = new ImageIcon(  getClass().getResource("images/white_ship.png")  );
+      if (this.DEBUG) System.out.println("Loaded images");
 			
 		}catch(NullPointerException e){
-			System.out.println("../assets/music/../assets/images folder not found!");
+			System.out.println("images folder not found!");
 		}
 		
 		try {
@@ -63,10 +65,10 @@ public class Client extends JFrame{
 		
 		Scanner sc = new Scanner(System.in);
 		System.out.print("Enter port: ");
-		int port = sc.nextInt();
-		sc.nextLine();
+		int port = 2043; // sc.nextInt();
+		// sc.nextLine();
 		System.out.print("Enter ip adress: ");
-		String ip = sc.nextLine();
+		String ip = "localhost"; // sc.nextLine();
 		
 		server = new ClientConnection();
 		server.createConnection(ip, port);
