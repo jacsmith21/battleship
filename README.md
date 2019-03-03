@@ -11,7 +11,7 @@ The main file for running a client is Client, enter the port given by the server
 Just use the following commands!
 ```
 cd server/
-javac -classpath "sqlite-jdbc-3.16.1.jar:$CLASSPATH" BattleShip.java
+javac *.java
 java -classpath "sqlite-jdbc-3.16.1.jar:$CLASSPATH" BattleShip
 ```
 
@@ -20,16 +20,28 @@ After launching the server, run two instances of the client.
 
 Use the following commands to launch one client.
 ```
+# this will download the theme song. It's 50mb because it's a WAV... sorry
+./setup.sh
+
 cd client/
 javac *.java
 java Client
-``` 
+```
+
+> WARNING: Registration seems to be broken. When logging in, use "jacob" as the username and "jacob" as the password.
+
 
 ## Screenshot
+<img src="https://i.ibb.co/n1PYRpb/battleship.png" alt="battleship" border="0">
+> Regular Gameplay
+
+<img src="https://i.ibb.co/wRHbnj6/darkbattlesihp.png" alt="darkbattlesihp" border="0">
+> Dark Mode
+
+<img src="https://i.ibb.co/jMfzPKQ/leaderboard.png" alt="leaderboard" border="0">
+> Leaderboards
+
 
 ## Other Important Information
-There must be a folder named "Images" in the Client folder; however, the game should run without the images.
-
-There must be a folder named "music" in the Client folder; however, the game should run without the music and FX.
-
-Returning to the home screen after signing in or registering will cause errors in the game. The protocol does not support moving back and forth between game states. Although, returing home at the leaderboards screen is possible as the server will restart each time and run until the connection is broken with a client. Returning home at this stage in the game will reset everything and you will be able to play again.
+1. Returning to the home screen after signing in or registering will cause errors in the game. The protocol does not support moving back and forth between game states. 
+2. Returning home at the leaderboards screen is possible as the server will restart each time and run until the connection is broken with a client. Returning home at this stage in the game will reset everything and you will be able to play again.

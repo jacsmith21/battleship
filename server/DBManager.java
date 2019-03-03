@@ -102,7 +102,7 @@ public class DBManager {
             }
 
             
-            if(passwordCheck.equals(password) || passwordCheck.equals("password")){
+            if(passwordCheck.equals(password)){
                 result = "ack";
             }
             else {

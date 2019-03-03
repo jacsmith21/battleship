@@ -64,10 +64,10 @@ public class Client extends JFrame{
 		cp = this.getContentPane(); //Getting content pane
 		
 		Scanner sc = new Scanner(System.in);
-		System.out.print("Enter port: ");
+		// System.out.print("Enter port: ");
 		int port = 2043; // sc.nextInt();
 		// sc.nextLine();
-		System.out.print("Enter ip adress: ");
+		// System.out.print("Enter ip adress: ");
 		String ip = "localhost"; // sc.nextLine();
 		
 		server = new ClientConnection();
