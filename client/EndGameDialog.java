@@ -7,7 +7,7 @@ public class EndGameDialog extends JDialog{
 	public EndGameDialog(Client client, String message){
 		ImageIcon commanderIcon = null;
 		try{
-			commanderIcon = new ImageIcon(  getClass().getResource("Images/black_commander.png")  );
+			commanderIcon = new ImageIcon(  getClass().getResource("../assets/images/black_commander.png")  );
 		}catch(Exception e){
 			System.out.println("Image folder not found!");
 		}

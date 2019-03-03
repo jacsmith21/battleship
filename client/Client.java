@@ -38,12 +38,12 @@ public class Client extends JFrame{
 		super("Battleship");
 		
 		try{
-			themeMusicFile = new File("music/ThemeMusic.wav");
-			blackShip = new ImageIcon(  getClass().getResource("Images/black_ship.png")  );
-			whiteShip = new ImageIcon(  getClass().getResource("Images/white_ship.png")  );
+			themeMusicFile = new File("../assets/music/ThemeMusic.wav");
+			blackShip = new ImageIcon(  getClass().getResource("../assets/images/black_ship.png")  );
+			whiteShip = new ImageIcon(  getClass().getResource("../assets/images/white_ship.png")  );
 			
 		}catch(NullPointerException e){
-			System.out.println("music/Images folder not found!");
+			System.out.println("../assets/music/../assets/images folder not found!");
 		}
 		
 		try {

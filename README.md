@@ -1,5 +1,6 @@
 # Battleship
-Battleship game using Java
+![Game Play](https://github.com/jacsmith21/battleship/blob/master/battleship.png)
+> Battleship game using Java
 
 ## General
 The main file of ther server is BattleShip, it will print the port number for the two clients. The first to connect will be player one, the second will be player two.
@@ -7,20 +8,25 @@ The main file of ther server is BattleShip, it will print the port number for th
 The main file for running a client is Client, enter the port given by the server and the server IP address when prompted to connect.
 
 ## Running the Server
-In order to run the updated server, the database and sqlite driver need to be in the same folder as the Server code. If you are running Windows, use these calls to compile and run the Server 
+Just use the following commands!
+```
+cd server/
+javac -classpath "sqlite-jdbc-3.16.1.jar:$CLASSPATH" BattleShip.java
+java -classpath "sqlite-jdbc-3.16.1.jar:$CLASSPATH" BattleShip
+```
 
-javac -classpath ".;sqlite-jdbc-3.16.1.jar" BattleShip.java
+## Running the Client
+After launching the server, run two instances of the client.
 
-java -classpath ".;sqlite-jdbc-3.16.1.jar" BattleShip
-
-If you’re using Linux make these calls:
-
-javac -classpath ".:sqlite-jdbc-3.16.1.jar" BattleShip.java
-
-java -classpath ".:sqlite-jdbc-3.16.1.jar" BattleShip
+Use the following commands to launch one client.
+```
+cd client/
+javac *.java
+java Client
+``` 
 
 ## Screenshot
-![Game Play](https://github.com/jacsmith21/battleship/blob/master/battleship.png)
+
 ## Other Important Information
 There must be a folder named "Images" in the Client folder; however, the game should run without the images.
 
